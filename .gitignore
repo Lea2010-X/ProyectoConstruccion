@@ -9,3 +9,5 @@
 .settings/
 libs/**/*.sha1
 libs/**/_remote.repositories
+/.idea/*
+ProyectoConstruccion.iml

@@ -1,0 +1,38 @@
+package Modelo;
+
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * DTO para el formulario "Buscar Comprobante".
+ * Contiene los datos del cliente y la lista de productos de esa factura.
+ */
+public class ModeloComprobante {
+
+    private int idFactura;
+    private Date fechaFactura;
+    private ModeloCliente cliente;
+    private List<ModeloDetalleReporte> items;
+    private double iva;
+    private double total;
+
+    // Getters y Setters
+    public int getIdFactura() { return idFactura; }
+    public void setIdFactura(int idFactura) { this.idFactura = idFactura; }
+
+    public Date getFechaFactura() { return fechaFactura; }
+    public void setFechaFactura(Date fechaFactura) { this.fechaFactura = fechaFactura; }
+
+    public ModeloCliente getCliente() { return cliente; }
+    public void setCliente(ModeloCliente cliente) { this.cliente = cliente; }
+
+    public List<ModeloDetalleReporte> getItems() { return items; }
+    public void setItems(List<ModeloDetalleReporte> items) { this.items = items; }
+
+    public double getIva() { return iva; }
+    public void setIva(double iva) { this.iva = iva; }
+
+    public double getTotal() { return total; }
+    public void setTotal(double total) { this.total = total; }
+}

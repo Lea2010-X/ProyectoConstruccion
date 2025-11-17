@@ -1,7 +1,5 @@
 package Controlador;
 
-public package Controlador;
-
 import DAO.ProductoDAO;
 import Modelo.ModeloProducto;
 import java.sql.SQLException;
@@ -28,7 +26,7 @@ public class ControladorProductoTest {
     @Mock // Crea un DAO impostor
     private ProductoDAO daoImpostor;
 
-    @InjectMocks // Crea un Controlador real e inyéctale el impostor
+    @InjectMocks // Crea un Controlador real e inyecta al impostor
     private ControladorProducto controlador; //
 
     @Test
@@ -56,6 +54,4 @@ public class ControladorProductoTest {
         assertEquals(15.5, productoPasadoAlDAO.getPrecioProducto());
         assertEquals(100, productoPasadoAlDAO.getStockProducto());
     }
-} {
-    
-}
+} 

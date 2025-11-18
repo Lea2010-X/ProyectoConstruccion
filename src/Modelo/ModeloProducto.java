@@ -14,6 +14,7 @@ public class ModeloProducto implements PorPagar {
     private double precioProducto;
     private int stockProducto;
 
+    //getters y setters
     public int getIdProducto() {
         return idProducto;
     }
@@ -45,14 +46,9 @@ public class ModeloProducto implements PorPagar {
     public void setStockProducto(int stockProducto) {
         this.stockProducto = stockProducto;
     }  
-    /**
-     * Calcula el valor total del inventario para este producto.
-     * (Precio * Stock)
-     * @return El monto total del pago (valor del inventario) como un double.
-     */
+
     @Override
     public double ObtenerMontoPago() {
-        // Usa los atributos privados de la clase
         return precioProducto * stockProducto;
     }
     

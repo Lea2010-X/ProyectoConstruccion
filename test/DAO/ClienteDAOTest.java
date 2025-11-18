@@ -28,7 +28,6 @@ public class ClienteDAOTest {
         conectorDePrueba = new CConexionTest();
         
         // 2. Inyecta la conexión de prueba en el DAO
-        // Gracias al refactor del Paso 2, esto es posible:
         dao = new ClienteDAO(conectorDePrueba);
         
         // 3. Limpia la tabla 'cliente' en la BD de prueba

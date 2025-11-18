@@ -122,7 +122,7 @@ public class ClienteDAO {
         String consulta = "SELECT idcliente, nombre, appaterno, apmaterno FROM cliente WHERE nombre LIKE CONCAT('%', ?, '%')";
 
         try (Connection conn = conector.estableceConexion();
-             PreparedStatement ps = conn.prepareStatement(consulta)) {
+            PreparedStatement ps = conn.prepareStatement(consulta)) {
             
             ps.setString(1, nombre);
             try (ResultSet rs = ps.executeQuery()) {

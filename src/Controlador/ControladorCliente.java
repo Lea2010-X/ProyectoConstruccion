@@ -11,7 +11,7 @@ import java.util.List;
  */
 public final class ControladorCliente {
 
-    private ClienteDAO clienteDAO; // Atributo privado
+    private ClienteDAO clienteDAO; 
 
     /**
      * Constructor estándar para la aplicación.

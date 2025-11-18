@@ -26,7 +26,7 @@ public class ControladorClienteTest {
     @Mock // Crea un DAO impostor
     private ClienteDAO daoImpostor;
 
-    @InjectMocks // Crea un Controlador real e inyéctale el impostor
+    @InjectMocks // Crea un Controlador real e inyecta al impostor
     private ControladorCliente controlador; //
 
     @Test

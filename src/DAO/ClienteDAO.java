@@ -27,7 +27,6 @@ public class ClienteDAO {
 
     /**
      * Constructor para Pruebas (Inyección de Dependencias).
-     * @param conector Un conector de base de datos (ej. uno de prueba).
      */
     public ClienteDAO(CConexion conector) {
         this.conector = conector;
@@ -35,8 +34,6 @@ public class ClienteDAO {
 
     /**
      * Obtiene todos los clientes de la base de datos.
-     * @return una lista de objetos ModeloCliente.
-     * @throws SQLException si ocurre un error de SQL.
      */
     public List<ModeloCliente> obtenerClientes() throws SQLException {
         List<ModeloCliente> clientes = new ArrayList<>();
@@ -58,11 +55,6 @@ public class ClienteDAO {
         return clientes;
     }
 
-    /**
-     * Agrega un nuevo cliente a la base de datos.
-     * @param cliente El objeto ModeloCliente con los datos a guardar.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public void agregarCliente(ModeloCliente cliente) throws SQLException {
         String consulta = "INSERT INTO cliente (nombre, appaterno, apmaterno) VALUES (?, ?, ?)";
 
@@ -75,12 +67,6 @@ public class ClienteDAO {
             cs.execute();
         }
     }
-
-    /**
-     * Modifica un cliente existente en la base de datos.
-     * @param cliente El objeto ModeloCliente con los datos actualizados.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public void modificarCliente(ModeloCliente cliente) throws SQLException {
         String consulta = "UPDATE cliente SET nombre = ?, appaterno = ?, apmaterno = ? WHERE idcliente = ?";
 
@@ -95,11 +81,6 @@ public class ClienteDAO {
         }
     }
 
-    /**
-     * Elimina un cliente de la base de datos usando su ID.
-     * @param idCliente El ID del cliente a eliminar.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public void eliminarCliente(int idCliente) throws SQLException {
         String consulta = "DELETE FROM cliente WHERE idcliente = ?";
 
@@ -110,13 +91,6 @@ public class ClienteDAO {
             cs.execute();
         }
     }
-
-    /**
-     * Busca clientes por nombre (coincidencia parcial).
-     * @param nombre El término de búsqueda.
-     * @return una lista de objetos ModeloCliente.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public List<ModeloCliente> buscarPorNombre(String nombre) throws SQLException {
         List<ModeloCliente> clientes = new ArrayList<>();
         String consulta = "SELECT idcliente, nombre, appaterno, apmaterno FROM cliente WHERE nombre LIKE CONCAT('%', ?, '%')";

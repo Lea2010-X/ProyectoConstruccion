@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
           java-version: '22'
       - name: Build with Ant
-        run: ant compile
+        run: ant compile -Dplatforms.JDK_22.home=$env:JAVA_HOME
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:

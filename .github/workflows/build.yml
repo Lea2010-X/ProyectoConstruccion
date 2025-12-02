@@ -13,20 +13,23 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      # 1. Instalar Java 22
       - name: Set up JDK 22
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '22'
+
+      # 2. Compilar con Ant
+      # Usamos default_platform para evitar errores con nombres de plataformas locales
       - name: Build with Ant
         run: ant compile -Dplatform.active=default_platform
+
+      # 3. Ejecutar SonarQube (Bloque corregido)
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.java.binaries=build/classes
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >

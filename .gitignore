@@ -2,8 +2,6 @@
 *.class
 /manifest.mf
 /nbproject/private/
-/nbproject/build-impl.xml
-/build.xml
 .project
 .classpath
 .settings/

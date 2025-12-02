@@ -21,7 +21,8 @@ El objetivo principal es ofrecer una herramienta ligera, monousuario y fácil de
 
 | Nombre del Integrante | Foto |
 |----------------------|------|
-| Esteban Canto Vázquez ||
-| José Manuel Ceballos Medina ||
-| Ángel Leandro Puch Uribe ||
-| Mauricio Emiliano Ramírez Ceciliano | |
+| Esteban Canto Vázquez |<img src="Assets/Integrantes/Esteban.jpeg" alt="Esteban" width="150" height="150" style="border-radius: 50%; object-fit: cover;">|
+| José Manuel Ceballos Medina |<img src="Assets/Integrantes/Jose.jpeg" alt="Jose" width="150" height="150" style="border-radius: 50%; object-fit: cover;">|
+| Ángel Leandro Puch Uribe |<img src="Assets/Integrantes/Angel.jpeg" alt="Angel" width="150" height="150" style="border-radius: 50%; object-fit: cover;">|
+| Mauricio Emiliano Ramírez Ceciliano |<img src="Assets/Integrantes/Mauricio.jpeg" alt="Mauricio" width="150" height="150" style="border-radius: 50%; object-fit: cover;"> |
+

@@ -21,12 +21,11 @@ jobs:
           distribution: 'temurin'
           java-version: '22'
 
-      # 2. Compilar con Ant
-      # Usamos default_platform para evitar errores con nombres de plataformas locales
+      # 2. Compilar con Ant (Ahora funcionará con el comando simple)
       - name: Build with Ant
-        run: ant compile -Dplatform.active=default_platform
+        run: ant compile
 
-      # 3. Ejecutar SonarQube (Bloque corregido)
+      # 3. Ejecutar SonarQube
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:

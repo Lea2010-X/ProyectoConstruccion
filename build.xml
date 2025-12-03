@@ -137,8 +137,8 @@
         <echo message="Running tests with JUnit 5 and JaCoCo coverage..."/>
         
         <!-- Run tests with JaCoCo agent as JVM argument -->
-        <!-- NOTE: junitlauncher CANNOT be wrapped in jacoco:coverage, use -javaagent instead -->
-        <junitlauncher printsummary="yes" haltonfailure="no">
+        <!-- NOTE: fork="true" is REQUIRED to use jvmarg -->
+        <junitlauncher printsummary="yes" haltonfailure="no" fork="true">
             <classpath>
                 <path path="${javac.classpath}"/>
                 <path path="${build.classes.dir}"/>

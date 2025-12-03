@@ -134,30 +134,31 @@
         <mkdir dir="${build.test.results.dir}"/>
         
         <!-- Define the JUnit 5 platform -->
-        <echo message="Running tests with JUnit 5..."/>
+        <echo message="Running tests with JUnit 5 and JaCoCo coverage..."/>
         
-        <!-- Run tests with JaCoCo agent using junitlauncher -->
-        <jacoco:coverage destfile="${jacoco.exec.file}">
-            <junitlauncher printsummary="yes" haltonfailure="no">
-                <classpath>
-                    <path path="${javac.classpath}"/>
-                    <path path="${build.classes.dir}"/>
-                    <path path="${build.test.classes.dir}"/>
-                    <path refid="junit5.classpath"/>
-                    <path path="${file.reference.mockito-core-5.11.0.jar}"/>
-                    <path path="${file.reference.mockito-junit-jupiter-5.11.0.jar}"/>
-                    <path path="${file.reference.byte-buddy-1.14.17.jar}"/>
-                    <path path="${file.reference.byte-buddy-agent-1.14.17.jar}"/>
-                </classpath>
-                <testclasses outputdir="${build.test.results.dir}">
-                    <fileset dir="${build.test.classes.dir}">
-                        <include name="**/*Test.class"/>
-                    </fileset>
-                    <listener type="legacy-xml" sendSysOut="true" sendSysErr="true"/>
-                    <listener type="legacy-plain" sendSysOut="true"/>
-                </testclasses>
-            </junitlauncher>
-        </jacoco:coverage>
+        <!-- Run tests with JaCoCo agent as JVM argument -->
+        <!-- NOTE: junitlauncher CANNOT be wrapped in jacoco:coverage, use -javaagent instead -->
+        <junitlauncher printsummary="yes" haltonfailure="no">
+            <classpath>
+                <path path="${javac.classpath}"/>
+                <path path="${build.classes.dir}"/>
+                <path path="${build.test.classes.dir}"/>
+                <path refid="junit5.classpath"/>
+                <path path="${file.reference.mockito-core-5.11.0.jar}"/>
+                <path path="${file.reference.mockito-junit-jupiter-5.11.0.jar}"/>
+                <path path="${file.reference.byte-buddy-1.14.17.jar}"/>
+                <path path="${file.reference.byte-buddy-agent-1.14.17.jar}"/>
+            </classpath>
+            <!-- JaCoCo agent for code coverage -->
+            <jvmarg value="-javaagent:${jacoco.dir}/jacocoagent.jar=destfile=${jacoco.exec.file}"/>
+            <testclasses outputdir="${build.test.results.dir}">
+                <fileset dir="${build.test.classes.dir}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+                <listener type="legacy-xml" sendSysOut="true" sendSysErr="true"/>
+                <listener type="legacy-plain" sendSysOut="true"/>
+            </testclasses>
+        </junitlauncher>
         
         <!-- Generate coverage reports -->
         <jacoco:report>

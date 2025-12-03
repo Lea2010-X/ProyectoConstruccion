@@ -9,3 +9,7 @@ libs/**/*.sha1
 libs/**/_remote.repositories
 /.idea/*
 ProyectoConstruccion.iml
+
+# JaCoCo coverage reports
+*.exec
+/libs/jacoco/

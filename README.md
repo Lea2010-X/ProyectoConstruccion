@@ -1,5 +1,11 @@
 # Lumina - POS
 
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/Lea2010-X/ProyectoConstruccion)
+
+**Repositorio del Proyecto**: [https://github.com/Lea2010-X/ProyectoConstruccion](https://github.com/Lea2010-X/ProyectoConstruccion)
+
+---
+
 Lumina es una aplicación de escritorio desarrollada en Java diseñada para ayudar a negocios nuevos a gestionar sus transacciones de manera eficiente. El sistema permite registrar un inventario de productos, administrar una base de datos de clientes y realizar ventas, generando comprobantes y permitiendo consultas históricas.
 
 El objetivo principal es ofrecer una herramienta ligera, monousuario y fácil de usar para emprendimientos que inician su digitalización.
@@ -441,11 +447,15 @@ run.bat
 - Documentación completa
 - Patrones de diseño apropiados
 
-### Contacto
-Para soporte técnico o consultas sobre implementación, consultar la documentación de código fuente inline (JavaDoc).
+### Contacto y Recursos
+
+- **Repositorio GitHub**: [https://github.com/Lea2010-X/ProyectoConstruccion](https://github.com/Lea2010-X/ProyectoConstruccion)
+- **Documentación**: JavaDoc inline en el código fuente
+- **Issues y Soporte**: [GitHub Issues](https://github.com/Lea2010-X/ProyectoConstruccion/issues)
 
 ---
 
-**Última actualización**: Diciembre 2025
-**Versión**: 1.0
+**Última actualización**: Diciembre 2025  
+**Versión**: 1.0  
+**Licencia**: Proyecto Académico - Construcción de Software
 

@@ -6,12 +6,12 @@ import Modelo.ModeloItemCarrito;
 import Modelo.ModeloProductoInventario;
 import Util.Constantes;
 import Util.TemaModerno;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
 public class FrmVentas extends javax.swing.JInternalFrame {
@@ -123,13 +123,13 @@ public class FrmVentas extends javax.swing.JInternalFrame {
         jButton3 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtBuscarCliente = new JTextField();
+        txtBuscarCliente = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbClientes = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        txtBuscarProductos = new JTextField();
+        txtBuscarProductos = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbProductos = new javax.swing.JTable();
@@ -139,26 +139,26 @@ public class FrmVentas extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        txtSIDCliente = new JTextField();
-        txtSNombresCliente = new JTextField();
-        txtSApellidoP = new JTextField();
-        txtSApellidoM = new JTextField();
+        txtSIDCliente = new javax.swing.JTextField();
+        txtSNombresCliente = new javax.swing.JTextField();
+        txtSApellidoP = new javax.swing.JTextField();
+        txtSApellidoM = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        txtSIDProducto = new JTextField();
-        txtSNombreProducto = new JTextField();
-        txtSPrecio = new JTextField();
-        txtSStock = new JTextField();
+        txtSIDProducto = new javax.swing.JTextField();
+        txtSNombreProducto = new javax.swing.JTextField();
+        txtSPrecio = new javax.swing.JTextField();
+        txtSStock = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        txtSPrecioVenta = new JTextField();
+        txtSPrecioVenta = new javax.swing.JTextField();
         btnHabilitar = new javax.swing.JButton();
         btnDeshabilitar = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
-        txtCantidadVenta = new JTextField();
+        txtCantidadVenta = new javax.swing.JTextField();
         btnAgregarProducto = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
@@ -203,7 +203,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Click para Seleccionar");
 
-        tbClientes.setModel(new DefaultTableModel(new Object [][] {},new String [] {"ID", "Nombre", "Ap. Paterno", "Ap. Materno"}) {
+        tbClientes.setModel(new javax.swing.table.DefaultTableModel(new Object [][] {},new String [] {"ID", "Nombre", "Ap. Paterno", "Ap. Materno"}) {
             boolean[] canEdit = new boolean [] {false, false, false, false};
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -261,7 +261,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Click para Seleccionar");
 
-        tbProductos.setModel(new DefaultTableModel(new Object [][] {},new String [] {"ID", "Nombre", "Precio", "Stock"}) {
+        tbProductos.setModel(new javax.swing.table.DefaultTableModel(new Object [][] {},new String [] {"ID", "Nombre", "Precio", "Stock"}) {
             boolean[] canEdit = new boolean [] {
                     false, false, false, false
             };
@@ -544,7 +544,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             }
         });
 
-        tbResumenVenta.setModel(new DefaultTableModel(new Object [][] {},new String [] {"ID Producto", "Nombre Producto", "Precio Producto", "Cantidad Producto", "SubTotal"}) {
+        tbResumenVenta.setModel(new javax.swing.table.DefaultTableModel(new Object [][] {},new String [] {"ID Producto", "Nombre Producto", "Precio Producto", "Cantidad Producto", "SubTotal"}) {
             boolean[] canEdit = new boolean [] {
                     false, false, false, false, false
             };
@@ -902,17 +902,17 @@ public class FrmVentas extends javax.swing.JInternalFrame {
     private javax.swing.JTable tbClientes;
     private javax.swing.JTable tbProductos;
     private javax.swing.JTable tbResumenVenta;
-    private JTextField txtBuscarCliente;
-    private JTextField txtBuscarProductos;
-    private JTextField txtCantidadVenta;
-    private JTextField txtSApellidoM;
-    private JTextField txtSApellidoP;
-    private JTextField txtSIDCliente;
-    private JTextField txtSIDProducto;
-    private JTextField txtSNombreProducto;
-    private JTextField txtSNombresCliente;
-    private JTextField txtSPrecio;
-    private JTextField txtSPrecioVenta;
-    private JTextField txtSStock;
+    private javax.swing.JTextField txtBuscarCliente;
+    private javax.swing.JTextField txtBuscarProductos;
+    private javax.swing.JTextField txtCantidadVenta;
+    private javax.swing.JTextField txtSApellidoM;
+    private javax.swing.JTextField txtSApellidoP;
+    private javax.swing.JTextField txtSIDCliente;
+    private javax.swing.JTextField txtSIDProducto;
+    private javax.swing.JTextField txtSNombreProducto;
+    private javax.swing.JTextField txtSNombresCliente;
+    private javax.swing.JTextField txtSPrecio;
+    private javax.swing.JTextField txtSPrecioVenta;
+    private javax.swing.JTextField txtSStock;
     // End of variables declaration//GEN-END:variables
 }

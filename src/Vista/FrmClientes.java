@@ -33,16 +33,22 @@ public class FrmClientes extends JInternalFrame {
         aplicarTemaModerno();
     }
     
+    /**
+     * Aplica el tema moderno a todos los componentes de la interfaz.
+     */
     private void aplicarTemaModerno() {
         TemaModerno.estilizarCampoTexto(txtIdCliente);
         TemaModerno.estilizarCampoTexto(txtNombres);
         TemaModerno.estilizarCampoTexto(txtApellidoPaterno);
         TemaModerno.estilizarCampoTexto(txtApellidoMaterno);
+        
         TemaModerno.estilizarBoton(btnGuardarCliente, "primario");
         TemaModerno.estilizarBoton(btnModificarCliente, "secundario");
         TemaModerno.estilizarBoton(btnEliminarCliente, "peligro");
         TemaModerno.estilizarBoton(btnLimpiarCampos, "advertencia");
+        
         TemaModerno.estilizarTabla(tbClientes);
+        
         TemaModerno.estilizarPanel(cardDatos, true);
     }
 
@@ -73,6 +79,7 @@ public class FrmClientes extends JInternalFrame {
         txtApellidoMaterno   = campoTexto();
 
         agregarCampo(cardDatos, gbc, "Nombres:", txtNombres, 0, 1);
+
         agregarCampo(cardDatos, gbc, "Apellido Paterno:", txtApellidoPaterno, 2, 1);
 
         agregarCampo(cardDatos, gbc, "Apellido Materno:", txtApellidoMaterno, 4, 1);
@@ -81,7 +88,7 @@ public class FrmClientes extends JInternalFrame {
         btnLimpiarCampos.addActionListener(e -> limpiarCampos());
 
         gbc.gridx = 0;
-        gbc.gridy = 2; 
+        gbc.gridy = 2;
         gbc.gridwidth = 6;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
@@ -168,7 +175,6 @@ public class FrmClientes extends JInternalFrame {
 
     private void agregarCampo(JPanel panel, GridBagConstraints gbc, String labelTexto, JComponent campo, int gridx, int gridy) {
         JLabel lbl = new JLabel(labelTexto);
-        // CORRECCIÓN CLAVE: Usar estilo del tema (texto oscuro) en lugar de Color.WHITE fijo
         TemaModerno.estilizarEtiqueta(lbl, "normal");
 
         gbc.gridx = gridx;
@@ -220,7 +226,6 @@ public class FrmClientes extends JInternalFrame {
         txtApellidoMaterno.setText("");
     }
 
-    
     /**
      * Valida que todos los campos del cliente estén completos.
      * @param validarApellidos true para validar apellidos también (para guardar), 
@@ -314,7 +319,7 @@ public class FrmClientes extends JInternalFrame {
         }
     }
 
-    private void btnEliminarClienteAction() {
+    private void btnEliminarClienteAction() {  
         if (!validarClienteSeleccionado()) return;
 
         if (JOptionPane.showConfirmDialog(this, 

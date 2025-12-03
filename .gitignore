@@ -13,3 +13,6 @@ ProyectoConstruccion.iml
 # JaCoCo coverage reports
 *.exec
 /libs/jacoco/
+
+# JUnit 5 libraries (downloaded automatically)
+/libs/junit5/

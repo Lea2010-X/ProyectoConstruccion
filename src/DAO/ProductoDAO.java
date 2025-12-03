@@ -7,39 +7,48 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayList; 
+import java.util.List; 
 import Configuracion.CConexion;
-import Modelo.*;
+import Modelo.*; 
 
 /**
  * Maneja el acceso a datos para la entidad Producto.
  * Habla directamente con la BD.
  */
-public class ProductoDAO {
-
-    private CConexion conector;
-    public ProductoDAO() {
-        this.conector = new CConexion();
-    }
-
+public class ProductoDAO extends BaseDAO {
+	
+	/**
+     * Constructor estándar para la aplicación.
+     * Usa la conexión de producción.
+     */
+    public ProductoDAO() { 
+        super(); 
+     }
+    
     /**
      * Constructor para Pruebas (Inyección de Dependencias).
+     * @param conector Un conector de base de datos (ej. uno de prueba).
      */
-    public ProductoDAO(CConexion conector){
-        this.conector = conector;
-    }
+    public ProductoDAO(CConexion conector){ 
+         super(conector); 
+     }
 
-    public List<ModeloProducto> obtenerProductos() throws SQLException {
-        List<ModeloProducto> productos = new ArrayList<>();
+    /**
+     * Obtiene todos los productos de la base de datos.
+     * @return una lista de objetos ModeloProductoInventario.
+     * @throws SQLException si ocurre un error de SQL.
+     */
+    public List<ModeloProductoInventario> obtenerProductos() throws SQLException {
+        List<ModeloProductoInventario> productos = new ArrayList<>();
         String sql = "SELECT idproducto, nombre, precioProducto, stock FROM producto";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                ModeloProducto producto = new ModeloProducto();
+                ModeloProductoInventario producto = new ModeloProductoInventario();
                 producto.setIdProducto(rs.getInt("idproducto"));
                 producto.setNombreProducto(rs.getString("nombre"));
                 producto.setPrecioProducto(rs.getDouble("precioProducto"));
@@ -50,10 +59,15 @@ public class ProductoDAO {
         return productos;
     }
 
-    public void agregarProducto(ModeloProducto producto) throws SQLException {
+    /**
+     * Agrega un nuevo producto a la base de datos.
+     * @param producto El objeto ModeloProductoInventario con los datos a guardar.
+     * @throws SQLException si ocurre un error de SQL.
+     */
+    public void agregarProducto(ModeloProductoInventario producto) throws SQLException {
         String consulta = "INSERT INTO producto(nombre, precioProducto, stock) VALUES (?, ?, ?)";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
              CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setString(1, producto.getNombreProducto());
@@ -63,11 +77,16 @@ public class ProductoDAO {
         }
     }
 
-    public void modificarProducto(ModeloProducto producto) throws SQLException {
+    /**
+     * Modifica un producto existente en la base de datos.
+     * @param producto El objeto ModeloProductoInventario con los datos actualizados.
+     * @throws SQLException si ocurre un error de SQL.
+     */
+    public void modificarProducto(ModeloProductoInventario producto) throws SQLException {
         String consulta = "UPDATE producto SET nombre = ?, precioProducto = ?, stock = ? WHERE idproducto = ?";
 
-        try (Connection conn = conector.estableceConexion();
-             CallableStatement cs = conn.prepareCall(consulta)) {
+        try (Connection conn = getConnection();
+            CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setString(1, producto.getNombreProducto());
             cs.setDouble(2, producto.getPrecioProducto());
@@ -77,28 +96,40 @@ public class ProductoDAO {
         }
     }
 
+    /**
+     * Elimina un producto de la base de datos usando su ID.
+     * @param idProducto El ID del producto a eliminar.
+     * @throws SQLException si ocurre un error de SQL.
+     */
     public void eliminarProducto(int idProducto) throws SQLException {
         String consulta = "DELETE FROM producto WHERE idproducto = ?";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
              CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setInt(1, idProducto);
             cs.execute();
         }
     }
+    
 
-    public List<ModeloProducto> buscarPorNombre(String nombre) throws SQLException {
-        List<ModeloProducto> productos = new ArrayList<>();
+    /**
+     * Busca productos por nombre (coincidencia parcial).
+     * @param nombre El término de búsqueda.
+     * @return una lista de objetos ModeloProductoInventario.
+     * @throws SQLException si ocurre un error de SQL.
+     */
+    public List<ModeloProductoInventario> buscarPorNombre(String nombre) throws SQLException {
+        List<ModeloProductoInventario> productos = new ArrayList<>();
         String consulta = "SELECT idproducto, nombre, precioProducto, stock FROM producto WHERE nombre LIKE CONCAT('%', ?, '%')";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(consulta)) {
-
+            
             ps.setString(1, nombre);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ModeloProducto producto = new ModeloProducto();
+                    ModeloProductoInventario producto = new ModeloProductoInventario();
                     producto.setIdProducto(rs.getInt("idproducto"));
                     producto.setNombreProducto(rs.getString("nombre"));
                     producto.setPrecioProducto(rs.getDouble("precioProducto"));
@@ -110,12 +141,18 @@ public class ProductoDAO {
         return productos;
     }
 
+    /**
+     * Actualiza el stock de un producto (reduce la cantidad).
+     * @param idProducto El ID del producto.
+     * @param cantidadVendida La cantidad a restar del stock.
+     * @throws SQLException si ocurre un error de SQL.
+     */
     public void actualizarStock(int idProducto, int cantidadVendida) throws SQLException {
         String consulta = "UPDATE producto SET stock = stock - ? WHERE idproducto = ?";
-
-        try (Connection conn = conector.estableceConexion();
-             PreparedStatement ps = conn.prepareStatement(consulta)) {
-
+        
+        try (Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(consulta)) {
+            
             ps.setInt(1, cantidadVendida);
             ps.setInt(2, idProducto);
             ps.executeUpdate();

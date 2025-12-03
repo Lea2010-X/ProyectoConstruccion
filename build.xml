@@ -133,12 +133,13 @@
         <mkdir dir="${jacoco.report.dir}"/>
         <mkdir dir="${build.test.results.dir}"/>
         
-        <!-- Define the JUnit 5 platform -->
-        <echo message="Running tests with JUnit 5 and JaCoCo coverage..."/>
+        <echo message="Running tests with JUnit 5 and JaCoCo coverage using Console Launcher..."/>
         
-        <!-- Run tests with JaCoCo agent as JVM argument -->
-        <!-- NOTE: fork="true" is REQUIRED to use jvmarg -->
-        <junitlauncher printsummary="yes" haltonfailure="no" fork="true">
+        <!-- Run tests using JUnit Platform Console Launcher with JaCoCo agent -->
+        <java classname="org.junit.platform.console.ConsoleLauncher"
+              fork="true"
+              failonerror="false"
+              resultproperty="junit.result">
             <classpath>
                 <path path="${javac.classpath}"/>
                 <path path="${build.classes.dir}"/>
@@ -151,14 +152,17 @@
             </classpath>
             <!-- JaCoCo agent for code coverage -->
             <jvmarg value="-javaagent:${jacoco.dir}/jacocoagent.jar=destfile=${jacoco.exec.file}"/>
-            <testclasses outputdir="${build.test.results.dir}">
-                <fileset dir="${build.test.classes.dir}">
-                    <include name="**/*Test.class"/>
-                </fileset>
-                <listener type="legacy-xml" sendSysOut="true" sendSysErr="true"/>
-                <listener type="legacy-plain" sendSysOut="true"/>
-            </testclasses>
-        </junitlauncher>
+            <!-- Console Launcher arguments -->
+            <arg value="--scan-classpath"/>
+            <arg value="--classpath"/>
+            <arg value="${build.test.classes.dir}"/>
+            <arg value="--reports-dir"/>
+            <arg value="${build.test.results.dir}"/>
+            <arg value="--details"/>
+            <arg value="tree"/>
+        </java>
+        
+        <echo message="Tests completed with result: ${junit.result}"/>
         
         <!-- Generate coverage reports -->
         <jacoco:report>

@@ -319,10 +319,13 @@ compile.bat
 
 #### 4. Ejecutar Aplicación
 ```bash
-# Opción 1: Usar script batch
+# Opción 1: Ejecutar el jar
+LuminaPOS.jar
+
+# Opción 2: Usar script batch
 run.bat
 
-# Opción 2: Desde NetBeans
+# Opción 3: Desde NetBeans
 # Usar Run Project
 ```
 

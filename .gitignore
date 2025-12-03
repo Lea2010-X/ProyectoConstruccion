@@ -15,4 +15,4 @@ ProyectoConstruccion.iml
 /libs/jacoco/
 
 # JUnit 5 libraries (downloaded automatically)
-/libs/junit5/
+/bin/

@@ -32,14 +32,23 @@ public abstract class BaseDAOTest {
      * 
      * @param tablas Nombres de las tablas a limpiar (en el orden que se proporcionan).
      * @throws SQLException si ocurre un error al limpiar las tablas.
+     * @throws IllegalArgumentException si algún nombre de tabla contiene caracteres no válidos.
      */
     protected void limpiarTablas(String... tablas) throws SQLException {
         try (Connection conn = conectorDePrueba.estableceConexion();
             Statement st = conn.createStatement()) {
             st.execute("SET FOREIGN_KEY_CHECKS=0");
+            
             for (String tabla : tablas) {
-                st.execute("TRUNCATE TABLE " + tabla);
+                if (!tabla.matches("^\\w+$")) {
+                    throw new IllegalArgumentException(
+                        "Nombre de tabla no válido: " + tabla + 
+                        ". Solo se permiten caracteres alfanuméricos y guiones bajos.");
+                }
+                st.addBatch("TRUNCATE TABLE `" + tabla + "`"); 
             }
+            
+            st.executeBatch();
             st.execute("SET FOREIGN_KEY_CHECKS=1");
         }
     }

@@ -23,7 +23,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         this.tableModel = (DefaultTableModel) tbProductos.getModel();
         
         txtIdProducto.setEnabled(false);
-        txtIdProducto.setVisible(false); // Oculta la caja de texto
+        txtIdProducto.setVisible(false);
         jLabel1.setVisible(false);
         aplicarTemaModerno();
         
@@ -34,22 +34,18 @@ public class FrmProducto extends javax.swing.JInternalFrame {
      * Aplica el tema moderno a todos los componentes de la interfaz.
      */
     private void aplicarTemaModerno() {
-        // Estilizar campos de texto
         TemaModerno.estilizarCampoTexto(txtIdProducto);
         TemaModerno.estilizarCampoTexto(txtNombreProducto);
         TemaModerno.estilizarCampoTexto(txtPrecioProducto);
         TemaModerno.estilizarCampoTexto(txtStockProducto);
         
-        // Estilizar botones
         TemaModerno.estilizarBoton(btnGuardar, "primario");
         TemaModerno.estilizarBoton(btnModificar, "secundario");
         TemaModerno.estilizarBoton(btnEliminar, "peligro");
         TemaModerno.estilizarBoton(btnLimpiarCampos, "advertencia");
         
-        // Estilizar tabla
         TemaModerno.estilizarTabla(tbProductos);
         
-        // Estilizar panel con borde como en FrmClientes
         TemaModerno.estilizarPanel(jPanel1, true);
         jPanel1.setBorder(BorderFactory.createCompoundBorder(
             new LineBorder(new Color(70, 70, 70), 1),
@@ -82,9 +78,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         txtPrecioProducto.setText("");
         txtStockProducto.setText("");
     }
-    
-    // ===== MÉTODOS DE VALIDACIÓN EXTRAÍDOS (Refactorización: Extract Method) =====
-    
+        
     /**
      * Valida que los campos del formulario no estén vacíos.
      * @return true si todos los campos tienen valor, false en caso contrario
@@ -150,8 +144,6 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         }
     }
 
-    // ===== MÉTODOS AUXILIARES (Similar a FrmClientes) =====
-    
     private JTextField campoTexto() {
         JTextField t = new JTextField();
         t.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -176,7 +168,6 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         JLabel lbl = new JLabel(labelTexto);
         TemaModerno.estilizarEtiqueta(lbl, "normal");
 
-        // Configuración para la etiqueta
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         gbc.gridwidth = 1;
@@ -184,7 +175,6 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(lbl, gbc);
 
-        // Configuración para el campo de texto
         gbc.gridx = gridx + 1;
         gbc.gridy = gridy;
         gbc.gridwidth = 1;
@@ -223,13 +213,11 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         setTitle("Producto");
         setPreferredSize(new java.awt.Dimension(900, 700));
 
-        // Crear panel con GridBagLayout similar a FrmClientes
         jPanel1.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Título
         JLabel lblTitulo = new JLabel("Datos de Producto");
         TemaModerno.estilizarEtiqueta(lblTitulo, "titulo");
 
@@ -254,17 +242,14 @@ public class FrmProducto extends javax.swing.JInternalFrame {
             }
         });
 
-        // Recrear campos de texto con el nuevo estilo
         txtNombreProducto = campoTexto();
         txtPrecioProducto = campoTexto();
         txtStockProducto = campoTexto();
         
-        // Agregar campos usando el método agregarCampo
         agregarCampo(jPanel1, gbc, "Nombre:", txtNombreProducto, 0, 1);
         agregarCampo(jPanel1, gbc, "Precio:", txtPrecioProducto, 2, 1);
         agregarCampo(jPanel1, gbc, "Stock:", txtStockProducto, 4, 1);
         
-        // Botón limpiar
         btnLimpiarCampos = botonClaro("Limpiar Campos");
         btnLimpiarCampos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -357,10 +342,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // Validar campos vacíos (método extraído)
         if (!validarCamposNoVacios()) return;
         
-        // Obtener datos validando formato (método extraído)
         Object[] datos = obtenerDatosProducto();
         if (datos == null) return;
         
@@ -368,7 +351,6 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         double precio = (double) datos[1];
         int stock = (int) datos[2];
         
-        // Validar reglas de negocio (métodos extraídos)
         if (!validarPrecio(precio)) return;
         if (!validarStock(stock)) return;
         
@@ -400,16 +382,13 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tbProductosMouseClicked
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // Validar que se seleccionó un producto
         if (txtIdProducto.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_REGISTRO, "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        // Validar campos vacíos (método extraído)
         if (!validarCamposNoVacios()) return;
         
-        // Obtener datos validando formato (método extraído)
         Object[] datos = obtenerDatosProducto();
         if (datos == null) return;
         
@@ -417,7 +396,6 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         double precio = (double) datos[1];
         int stock = (int) datos[2];
         
-        // Validar reglas de negocio (métodos extraídos)
         if (!validarPrecio(precio)) return;
         if (!validarStock(stock)) return;
         
@@ -437,13 +415,11 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnLimpiarCamposActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // Validar que se seleccionó un producto
         if (txtIdProducto.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un producto de la tabla.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Pedir confirmación
         int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea eliminar este producto?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         
         if (confirmacion != JOptionPane.YES_OPTION) {
@@ -451,11 +427,9 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         }
 
         try {
-            // Si se confirma, llamar al controlador
             int id = Integer.parseInt(txtIdProducto.getText());
             controlador.eliminarProducto(id);
 
-            // Informar y limpiar
             JOptionPane.showMessageDialog(this, "Producto eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             actualizarTabla();
             limpiarCampos();

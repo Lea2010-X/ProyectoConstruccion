@@ -11,9 +11,14 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class GeneradorPDFTest {
 
+    private static final Logger logger = Logger.getLogger(GeneradorPDFTest.class.getName());
     private String rutaPDFGenerado;
 
     @BeforeEach
@@ -35,9 +41,13 @@ class GeneradorPDFTest {
     @AfterEach
     void tearDown() {
         if (rutaPDFGenerado != null) {
-            File archivo = new File(rutaPDFGenerado);
-            if (archivo.exists()) {
-                archivo.delete();
+            Path archivo = Paths.get(rutaPDFGenerado);
+            if (Files.exists(archivo)) {
+                try {
+                    Files.delete(archivo);
+                } catch (IOException e) {
+                    logger.log(Level.WARNING, e, () -> "No se pudo eliminar el archivo de prueba: " + rutaPDFGenerado);
+                }
             }
         }
     }
@@ -130,7 +140,12 @@ class GeneradorPDFTest {
 
         assertNotEquals(rutaPDF1, rutaPDF2, "Los archivos PDF deben tener nombres únicos");
 
-        new File(rutaPDF2).delete();
+        Path archivoTemporal = Paths.get(rutaPDF2);
+        try {
+            Files.delete(archivoTemporal);
+        } catch (IOException e) {
+            fail("El archivo temporal debe poder eliminarse: " + e.getMessage());
+        }
         rutaPDFGenerado = rutaPDF1; 
     }
 

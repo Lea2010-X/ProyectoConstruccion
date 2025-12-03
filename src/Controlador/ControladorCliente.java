@@ -9,9 +9,9 @@ import java.util.List;
  * Controlador para la entidad Cliente.
  * Su función es coordinar la Vista (FrmClientes) con la capa de acceso a datos (ClienteDAO).
  */
-public final class ControladorCliente {
+public final class ControladorCliente extends ControladorBase {
 
-    private ClienteDAO clienteDAO; 
+    private ClienteDAO clienteDAO;
 
     /**
      * Constructor estándar para la aplicación.
@@ -19,19 +19,41 @@ public final class ControladorCliente {
      */
     public ControladorCliente() {
         this.clienteDAO = new ClienteDAO();
+        validarDependencias();
     }
     
     /**
      * Constructor para Pruebas (Inyección de Dependencias).
+     * @param clienteDAO Un DAO (puede ser uno real o un mock).
      */
     public ControladorCliente(ClienteDAO clienteDAO) {
-        this.clienteDAO = clienteDAO; // Usa el DAO "inyectado"
+        this.clienteDAO = clienteDAO;
+        validarDependencias();
     }
 
+    @Override
+    protected void validarDependencias() {
+        if (this.clienteDAO == null) {
+            throw new IllegalStateException("ClienteDAO no puede ser nulo");
+        }
+    }
+
+    /**
+     * Pide al DAO la lista de todos los clientes.
+     * @return Lista de ModeloCliente
+     * @throws SQLException si el DAO falla.
+     */
     public List<ModeloCliente> obtenerClientes() throws SQLException {
         return this.clienteDAO.obtenerClientes();
     }
 
+    /**
+     * Procesa la solicitud de agregar un nuevo cliente.
+     * @param nombre Nombre del cliente.
+     * @param appaterno Apellido paterno.
+     * @param apmaterno Apellido materno.
+     * @throws SQLException si el DAO falla.
+     */
     public void agregarCliente(String nombre, String appaterno, String apmaterno) throws SQLException {
         ModeloCliente cliente = new ModeloCliente();
         cliente.setNombre(nombre);
@@ -41,6 +63,14 @@ public final class ControladorCliente {
         this.clienteDAO.agregarCliente(cliente);
     }
 
+    /**
+     * Procesa la solicitud de modificar un cliente.
+     * @param id El ID del cliente a modificar.
+     * @param nombre El nuevo nombre.
+     * @param appaterno El nuevo apellido paterno.
+     * @param apmaterno El nuevo apellido materno.
+     * @throws SQLException si el DAO falla.
+     */
     public void modificarCliente(int id, String nombre, String appaterno, String apmaterno) throws SQLException {
         ModeloCliente cliente = new ModeloCliente();
         cliente.setIdCliente(id);
@@ -51,6 +81,11 @@ public final class ControladorCliente {
         this.clienteDAO.modificarCliente(cliente);
     }
 
+    /**
+     * Procesa la solicitud de eliminar un cliente.
+     * @param id El ID del cliente a eliminar.
+     * @throws SQLException si el DAO falla.
+     */
     public void eliminarCliente(int id) throws SQLException {
         this.clienteDAO.eliminarCliente(id);
     }

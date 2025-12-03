@@ -14,32 +14,35 @@ import Modelo.*;
 /**
  * Esta clase maneja toda la lógica de acceso a datos para la entidad Cliente.
  */
-public class ClienteDAO {
-	private CConexion conector;
+public class ClienteDAO extends BaseDAO {
 	
 	/**
      * Constructor estándar para la aplicación.
      * Usa la conexión de producción.
      */
+
     public ClienteDAO() {
-        this.conector = new CConexion();
+        super();
     }
 
     /**
      * Constructor para Pruebas (Inyección de Dependencias).
+     * @param conector Un conector de base de datos (ej. uno de prueba).
      */
     public ClienteDAO(CConexion conector) {
-        this.conector = conector;
+        super(conector);
     }
 
     /**
      * Obtiene todos los clientes de la base de datos.
+     * @return una lista de objetos ModeloCliente.
+     * @throws SQLException si ocurre un error de SQL.
      */
     public List<ModeloCliente> obtenerClientes() throws SQLException {
         List<ModeloCliente> clientes = new ArrayList<>();
         String sql = "SELECT idcliente, nombre, appaterno, apmaterno FROM cliente";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql)) {
 
@@ -55,10 +58,15 @@ public class ClienteDAO {
         return clientes;
     }
 
+    /**
+     * Agrega un nuevo cliente a la base de datos.
+     * @param cliente El objeto ModeloCliente con los datos a guardar.
+     * @throws SQLException si ocurre un error de SQL.
+     */
     public void agregarCliente(ModeloCliente cliente) throws SQLException {
         String consulta = "INSERT INTO cliente (nombre, appaterno, apmaterno) VALUES (?, ?, ?)";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setString(1, cliente.getNombre());
@@ -67,10 +75,16 @@ public class ClienteDAO {
             cs.execute();
         }
     }
+
+    /**
+     * Modifica un cliente existente en la base de datos.
+     * @param cliente El objeto ModeloCliente con los datos actualizados.
+     * @throws SQLException si ocurre un error de SQL.
+     */
     public void modificarCliente(ModeloCliente cliente) throws SQLException {
         String consulta = "UPDATE cliente SET nombre = ?, appaterno = ?, apmaterno = ? WHERE idcliente = ?";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setString(1, cliente.getNombre());
@@ -81,21 +95,33 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Elimina un cliente de la base de datos usando su ID.
+     * @param idCliente El ID del cliente a eliminar.
+     * @throws SQLException si ocurre un error de SQL.
+     */
     public void eliminarCliente(int idCliente) throws SQLException {
         String consulta = "DELETE FROM cliente WHERE idcliente = ?";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setInt(1, idCliente);
             cs.execute();
         }
     }
+
+    /**
+     * Busca clientes por nombre (coincidencia parcial).
+     * @param nombre El término de búsqueda.
+     * @return una lista de objetos ModeloCliente.
+     * @throws SQLException si ocurre un error de SQL.
+     */
     public List<ModeloCliente> buscarPorNombre(String nombre) throws SQLException {
         List<ModeloCliente> clientes = new ArrayList<>();
         String consulta = "SELECT idcliente, nombre, appaterno, apmaterno FROM cliente WHERE nombre LIKE CONCAT('%', ?, '%')";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             PreparedStatement ps = conn.prepareStatement(consulta)) {
             
             ps.setString(1, nombre);

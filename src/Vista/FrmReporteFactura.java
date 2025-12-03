@@ -106,6 +106,7 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setTitle("Reporte de Factura");
 
+        // --- Panel de Búsqueda Centrado ---
         pnlIngresarNumeroDeFactura.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingresar Numero de Factura"));
 
         btnBuscar.setText("Buscar");
@@ -136,15 +137,18 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        // --- Etiquetas ---
         lbFactura.setFont(new java.awt.Font("Segoe UI", 1, 14));
         lbFactura.setText("Factura N°:");
         lbMostrarFactura.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lbMostrarFactura.setText("...");
+
         lbFechaDeVenta.setFont(new java.awt.Font("Segoe UI", 1, 14));
         lbFechaDeVenta.setText("Fecha de Venta:");
         lbMostrarFechaDeVenta.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lbMostrarFechaDeVenta.setText("...");
 
+        // --- Panel Datos Cliente ---
         pnlDatosCliente.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Cliente"));
         lbNombres.setFont(new java.awt.Font("Segoe UI", 1, 14));
         lbNombres.setText("Nombres:");
@@ -197,8 +201,8 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
         lbProductos.setText("Productos");
 
         tbProductos.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {},new String [] {"N.Producto", "Cantidad", "PrecioVenta", "Subtotal", "Total"}) {
-            boolean[] canEdit = new boolean [] {false, false, false, false, false};
+                new Object [][] {}, new String [] {"N.Producto", "Cantidad", "PrecioVenta", "Subtotal"}) {
+            boolean[] canEdit = new boolean [] {false, false, false, false};
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
@@ -209,6 +213,7 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
         lbIVA.setText("IVA:");
         lbMostrarIVA.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lbMostrarIVA.setText("...");
+
         lbTotal.setFont(new java.awt.Font("Segoe UI", 1, 14));
         lbTotal.setText("Total:");
         lbMostrarTotal.setFont(new java.awt.Font("Segoe UI", 0, 14));
@@ -223,6 +228,7 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
             }
         });
 
+        // --- LAYOUT PRINCIPAL ---
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -241,18 +247,20 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                                                 .addComponent(lbMostrarFechaDeVenta))
                                         .addComponent(pnlDatosCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(pnlIngresarNumeroDeFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
+                                        // CAMBIO 1: Tabla ocupa todo el ancho
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
+
+                                        // CAMBIO 2: Grupo de Totales Alineado a la Derecha y Compacto
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE) // Empuja todo a la derecha
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(lbIVA)
                                                         .addComponent(lbTotal))
+                                                .addGap(15, 15, 15) // Espacio pequeño entre Etiqueta y Valor
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGap(31, 31, 31)
-                                                                .addComponent(lbMostrarIVA))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(lbMostrarTotal)))))
+                                                        .addComponent(lbMostrarIVA)
+                                                        .addComponent(lbMostrarTotal))))
                                 .addContainerGap(26, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -275,15 +283,21 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lbProductos)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+
+                                // CAMBIO 1: Altura aumentada a 300px y es flexible (Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+
+                                // CAMBIO 2: Sin espacios grandes entre IVA y Total
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(lbIVA)
                                         .addComponent(lbMostrarIVA))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) // Espacio pequeño (6px)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(lbTotal)
                                         .addComponent(lbMostrarTotal))
+
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnGenerarPDF)
                                 .addGap(20, 20, 20))

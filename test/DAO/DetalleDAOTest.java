@@ -4,8 +4,7 @@ import Modelo.ModeloCliente;
 import Modelo.ModeloProductoInventario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Prueba de Integración para DetalleDAO.

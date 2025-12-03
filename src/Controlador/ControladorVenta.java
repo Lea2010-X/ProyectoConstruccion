@@ -7,7 +7,6 @@ import DAO.ProductoDAO;
 import Modelo.ModeloCliente;
 import Modelo.ModeloItemCarrito;
 import Modelo.ModeloProductoInventario;
-
 import java.sql.SQLException;
 import java.util.List;
 

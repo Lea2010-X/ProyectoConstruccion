@@ -25,18 +25,11 @@ public class ProductoDAO {
 
     /**
      * Constructor para Pruebas (Inyección de Dependencias).
-     * @param conector Un conector de base de datos (ej. uno de prueba).
      */
-
     public ProductoDAO(CConexion conector){
         this.conector = conector;
     }
 
-    /**
-     * Obtiene todos los productos de la base de datos.
-     * @return una lista de objetos ModeloProducto.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public List<ModeloProducto> obtenerProductos() throws SQLException {
         List<ModeloProducto> productos = new ArrayList<>();
         String sql = "SELECT idproducto, nombre, precioProducto, stock FROM producto";
@@ -57,11 +50,6 @@ public class ProductoDAO {
         return productos;
     }
 
-    /**
-     * Agrega un nuevo producto a la base de datos.
-     * @param producto El objeto ModeloProducto con los datos a guardar.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public void agregarProducto(ModeloProducto producto) throws SQLException {
         String consulta = "INSERT INTO producto(nombre, precioProducto, stock) VALUES (?, ?, ?)";
 
@@ -75,11 +63,6 @@ public class ProductoDAO {
         }
     }
 
-    /**
-     * Modifica un producto existente en la base de datos.
-     * @param producto El objeto ModeloProducto con los datos actualizados.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public void modificarProducto(ModeloProducto producto) throws SQLException {
         String consulta = "UPDATE producto SET nombre = ?, precioProducto = ?, stock = ? WHERE idproducto = ?";
 
@@ -94,11 +77,6 @@ public class ProductoDAO {
         }
     }
 
-    /**
-     * Elimina un producto de la base de datos usando su ID.
-     * @param idProducto El ID del producto a eliminar.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public void eliminarProducto(int idProducto) throws SQLException {
         String consulta = "DELETE FROM producto WHERE idproducto = ?";
 
@@ -110,12 +88,6 @@ public class ProductoDAO {
         }
     }
 
-    /**
-     * Busca productos por nombre (coincidencia parcial).
-     * @param nombre El término de búsqueda.
-     * @return una lista de objetos ModeloProducto.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public List<ModeloProducto> buscarPorNombre(String nombre) throws SQLException {
         List<ModeloProducto> productos = new ArrayList<>();
         String consulta = "SELECT idproducto, nombre, precioProducto, stock FROM producto WHERE nombre LIKE CONCAT('%', ?, '%')";
@@ -138,12 +110,6 @@ public class ProductoDAO {
         return productos;
     }
 
-    /**
-     * Actualiza el stock de un producto (reduce la cantidad).
-     * @param idProducto El ID del producto.
-     * @param cantidadVendida La cantidad a restar del stock.
-     * @throws SQLException si ocurre un error de SQL.
-     */
     public void actualizarStock(int idProducto, int cantidadVendida) throws SQLException {
         String consulta = "UPDATE producto SET stock = stock - ? WHERE idproducto = ?";
 

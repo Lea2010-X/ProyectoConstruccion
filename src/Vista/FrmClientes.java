@@ -2,34 +2,194 @@ package Vista;
 
 import Controlador.ControladorCliente;
 import Modelo.ModeloCliente;
+import Util.Mensajes;
+import Util.TemaModerno;
+import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
-public class FrmClientes extends javax.swing.JInternalFrame {
+public class FrmClientes extends JInternalFrame {
 
     private ControladorCliente controlador;
     private DefaultTableModel tableModel;
 
+    private JPanel cardDatos;
+    private JTextField txtIdCliente, txtNombres, txtApellidoPaterno, txtApellidoMaterno;
+    private JButton btnLimpiarCampos, btnGuardarCliente, btnModificarCliente, btnEliminarCliente;
+    private JTable tbClientes;
+
     public FrmClientes() {
-        initComponents();
-        
-        this.controlador = new ControladorCliente();
-        this.tableModel = (DefaultTableModel) tbClientes.getModel();
-        
-        
+        super("Clientes", true, true, true, true);
+        initUI();
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        controlador = new ControladorCliente();
+        tableModel = (DefaultTableModel) tbClientes.getModel();
         txtIdCliente.setEnabled(false);
         actualizarTabla();
+        aplicarTemaModerno();
+    }
+    
+    private void aplicarTemaModerno() {
+        TemaModerno.estilizarCampoTexto(txtIdCliente);
+        TemaModerno.estilizarCampoTexto(txtNombres);
+        TemaModerno.estilizarCampoTexto(txtApellidoPaterno);
+        TemaModerno.estilizarCampoTexto(txtApellidoMaterno);
+        TemaModerno.estilizarBoton(btnGuardarCliente, "primario");
+        TemaModerno.estilizarBoton(btnModificarCliente, "secundario");
+        TemaModerno.estilizarBoton(btnEliminarCliente, "peligro");
+        TemaModerno.estilizarBoton(btnLimpiarCampos, "advertencia");
+        TemaModerno.estilizarTabla(tbClientes);
+        TemaModerno.estilizarPanel(cardDatos, true);
     }
 
+    private void initUI() {
+        setSize(900, 600);
+        setLayout(new BorderLayout());
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.setBorder(new EmptyBorder(15, 15, 15, 15));
+
+        cardDatos = new JPanel();
+        cardDatos.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblTitulo = new JLabel("Datos del Cliente");
+        TemaModerno.estilizarEtiqueta(lblTitulo, "titulo");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 6; 
+        gbc.anchor = GridBagConstraints.CENTER;
+        cardDatos.add(lblTitulo, gbc);
+
+        txtIdCliente         = campoTexto();
+        txtNombres           = campoTexto();
+        txtApellidoPaterno   = campoTexto();
+        txtApellidoMaterno   = campoTexto();
+
+        agregarCampo(cardDatos, gbc, "Nombres:", txtNombres, 0, 1);
+        agregarCampo(cardDatos, gbc, "Apellido Paterno:", txtApellidoPaterno, 2, 1);
+
+        agregarCampo(cardDatos, gbc, "Apellido Materno:", txtApellidoMaterno, 4, 1);
+
+        btnLimpiarCampos = botonClaro("Limpiar Campos");
+        btnLimpiarCampos.addActionListener(e -> limpiarCampos());
+
+        gbc.gridx = 0;
+        gbc.gridy = 2; 
+        gbc.gridwidth = 6;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        cardDatos.add(btnLimpiarCampos, gbc);
+
+        tbClientes = new JTable(new DefaultTableModel(
+                new Object[][] {},
+                new String[]{"ID", "Nombre", "Ap. Paterno", "Ap. Materno"}
+        ) {
+            public boolean isCellEditable(int row, int column) { return false; }
+        });
+
+        JScrollPane scrollTabla = new JScrollPane(tbClientes);
+        scrollTabla.setBorder(new EmptyBorder(10, 0, 10, 0));
+
+        tbClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableRowClicked();
+            }
+        });
+
+        JPanel panelBotones = new JPanel();
+        panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
+
+        btnGuardarCliente   = botonAccion("Guardar",   new Color(55, 140, 90));
+        btnModificarCliente = botonAccion("Modificar", new Color(52, 104, 180));
+        btnEliminarCliente  = botonAccion("Eliminar",  new Color(160, 60, 60));
+
+        panelBotones.add(btnGuardarCliente);
+        panelBotones.add(btnModificarCliente);
+        panelBotones.add(btnEliminarCliente);
+
+        btnGuardarCliente.addActionListener(e -> btnGuardarClienteAction());
+        btnModificarCliente.addActionListener(e -> btnModificarClienteAction());
+        btnEliminarCliente.addActionListener(e -> btnEliminarClienteAction());
+
+        panelPrincipal.add(cardDatos, BorderLayout.NORTH);
+        panelPrincipal.add(scrollTabla, BorderLayout.CENTER);
+        panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
+
+        add(panelPrincipal, BorderLayout.CENTER);
+    }
+    private JTextField campoTexto() {
+        JTextField t = new JTextField();
+        t.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        t.setBackground(new Color(58, 60, 68));
+        t.setForeground(Color.WHITE);
+        t.setCaretColor(Color.WHITE);
+        t.setBorder(new EmptyBorder(6, 6, 6, 6));
+        return t;
+    }
+
+    private JButton botonClaro(String texto) {
+        JButton btn = new JButton(texto);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        btn.setBackground(new Color(90, 90, 100));
+        btn.setForeground(Color.WHITE);
+        btn.setBorder(new EmptyBorder(8, 12, 8, 12));
+
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent e) { btn.setBackground(new Color(110, 110, 120)); }
+            public void mouseExited(java.awt.event.MouseEvent e)  { btn.setBackground(new Color(90, 90, 100)); }
+        });
+
+        return btn;
+    }
+
+    private JButton botonAccion(String texto, Color c) {
+        JButton btn = new JButton(texto);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Segoe UI Semibold", Font.BOLD, 15));
+        btn.setBackground(c);
+        btn.setForeground(Color.WHITE);
+        btn.setBorder(new EmptyBorder(8, 20, 8, 20));
+
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent e) { btn.setBackground(c.darker()); }
+            public void mouseExited(java.awt.event.MouseEvent e)  { btn.setBackground(c); }
+        });
+
+        return btn;
+    }
+
+    private void agregarCampo(JPanel panel, GridBagConstraints gbc, String labelTexto, JComponent campo, int gridx, int gridy) {
+        JLabel lbl = new JLabel(labelTexto);
+        // CORRECCIÓN CLAVE: Usar estilo del tema (texto oscuro) en lugar de Color.WHITE fijo
+        TemaModerno.estilizarEtiqueta(lbl, "normal");
+
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(lbl, gbc);
+
+        gbc.gridx = gridx + 1;
+        gbc.gridy = gridy;
+        gbc.gridwidth = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(campo, gbc);
+    }
     private void actualizarTabla() {
         tableModel.setRowCount(0);
 
         try {
             List<ModeloCliente> clientes = controlador.obtenerClientes();
-
             for (ModeloCliente cliente : clientes) {
                 tableModel.addRow(new Object[]{
                     cliente.getIdCliente(),
@@ -39,8 +199,18 @@ public class FrmClientes extends javax.swing.JInternalFrame {
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar los clientes: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al cargar los clientes: " + e.getMessage());
         }
+    }
+
+    private void tableRowClicked() {
+        int fila = tbClientes.getSelectedRow();
+        if (fila == -1) return;
+
+        txtIdCliente.setText(tableModel.getValueAt(fila, 0).toString());
+        txtNombres.setText(tableModel.getValueAt(fila, 1).toString());
+        txtApellidoPaterno.setText(tableModel.getValueAt(fila, 2).toString());
+        txtApellidoMaterno.setText(tableModel.getValueAt(fila, 3).toString());
     }
 
     private void limpiarCampos() {
@@ -50,329 +220,118 @@ public class FrmClientes extends javax.swing.JInternalFrame {
         txtApellidoMaterno.setText("");
     }
 
+    
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * Valida que todos los campos del cliente estén completos.
+     * @param validarApellidos true para validar apellidos también (para guardar), 
+     *                         false para validación parcial (para modificar)
+     * @return true si la validación pasa, false en caso contrario
      */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        pnlDatosCliente = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtIdCliente = new javax.swing.JTextField();
-        txtNombres = new javax.swing.JTextField();
-        txtApellidoPaterno = new javax.swing.JTextField();
-        txtApellidoMaterno = new javax.swing.JTextField();
-        btnLimpiarCampos = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbClientes = new javax.swing.JTable();
-        jLabel5 = new javax.swing.JLabel();
-        btnGuardarCliente = new javax.swing.JButton();
-        btnModificarCliente = new javax.swing.JButton();
-        btnEliminarCliente = new javax.swing.JButton();
-
-        setClosable(true);
-        setIconifiable(true);
-        setTitle("Clientes");
-
-        pnlDatosCliente.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Cliente"));
-
-        jLabel1.setText("Id:");
-
-        jLabel2.setText("Nombres:");
-
-        jLabel3.setText("Apellido Paterno:");
-
-        jLabel4.setText("Apellido Materno:");
-
-        btnLimpiarCampos.setText("Limpiar Campos");
-        btnLimpiarCampos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarCamposActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlDatosClienteLayout = new javax.swing.GroupLayout(pnlDatosCliente);
-        pnlDatosCliente.setLayout(pnlDatosClienteLayout);
-        pnlDatosClienteLayout.setHorizontalGroup(
-            pnlDatosClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(pnlDatosClienteLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlDatosClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlDatosClienteLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(4, 4, 4)
-                        .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlDatosClienteLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnLimpiarCampos)))
-                .addContainerGap())
-        );
-        pnlDatosClienteLayout.setVerticalGroup(
-            pnlDatosClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlDatosClienteLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(pnlDatosClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnLimpiarCampos)
-                .addContainerGap(8, Short.MAX_VALUE))
-        );
-
-        tbClientes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},new String [] {"ID", "Nombre", "Ap. Paterno", "Ap. Materno"}) {
-            boolean[] canEdit = new boolean [] {false, false, false, false};
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tbClientes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbClientesMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tbClientes);
-
-        jLabel5.setText("Seleccionar para modificar o eliminar");
-
-        btnGuardarCliente.setText("Guardar");
-        btnGuardarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarClienteActionPerformed(evt);
-            }
-        });
-
-        btnModificarCliente.setText("Modificar");
-        btnModificarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarClienteActionPerformed(evt);
-            }
-        });
-
-        btnEliminarCliente.setText("Eliminar");
-        btnEliminarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarClienteActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlDatosCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnGuardarCliente)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnModificarCliente)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminarCliente)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel5)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlDatosCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardarCliente)
-                    .addComponent(btnModificarCliente)
-                    .addComponent(btnEliminarCliente))
-                .addGap(17, 17, 17))
-        );
-
-        pnlDatosCliente.getAccessibleContext().setAccessibleDescription("");
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
-        
-        // Obtener datos de la UI y limpiar espacios
+    private boolean validarCamposCliente(boolean validarApellidos) {
         String nombre = txtNombres.getText().trim();
         String apPaterno = txtApellidoPaterno.getText().trim();
         String apMaterno = txtApellidoMaterno.getText().trim();
-
-        // Validar campos (Nombre es obligatorio)
+        
         if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo 'Nombres' no puede estar vacío.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            txtNombres.requestFocus(); // Pone el cursor en el campo de nombres
-            return;
+            JOptionPane.showMessageDialog(this, "El nombre es requerido.", 
+                "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            txtNombres.requestFocus();
+            return false;
         }
         
-        if (apPaterno.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo 'Apellido Paterno' no puede estar vacío.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            txtApellidoPaterno.requestFocus();
-            return;
+        if (validarApellidos) {
+            if (apPaterno.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El apellido paterno es requerido.", 
+                    "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                txtApellidoPaterno.requestFocus();
+                return false;
+            }
+            if (apMaterno.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El apellido materno es requerido.", 
+                    "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                txtApellidoMaterno.requestFocus();
+                return false;
+            }
         }
         
-        if (apMaterno.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo 'Apellido Materno' no puede estar vacío.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            txtApellidoPaterno.requestFocus();
-            return;
+        return true;
+    }
+    
+    /**
+     * Valida que se haya seleccionado un cliente de la tabla.
+     * @return true si hay un cliente seleccionado, false en caso contrario
+     */
+    private boolean validarClienteSeleccionado() {
+        if (txtIdCliente.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_REGISTRO, 
+                "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
+        return true;
+    }
+    
+    /**
+     * Obtiene los datos del cliente del formulario.
+     * @return Array con [nombre, apPaterno, apMaterno]
+     */
+    private String[] obtenerDatosCliente() {
+        return new String[]{
+            txtNombres.getText().trim(),
+            txtApellidoPaterno.getText().trim(),
+            txtApellidoMaterno.getText().trim()
+        };
+    }
 
-        // Si todo es válido, llamar al controlador
+    private void btnGuardarClienteAction() {
+        if (!validarCamposCliente(true)) return;
+        
+        String[] datos = obtenerDatosCliente();
+
         try {
-            controlador.agregarCliente(nombre, apPaterno, apMaterno);
-            JOptionPane.showMessageDialog(this, "Cliente guardado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            controlador.agregarCliente(datos[0], datos[1], datos[2]);
             actualizarTabla();
             limpiarCampos();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el cliente: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Cliente guardado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnGuardarClienteActionPerformed
+    }
 
-    private void tbClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClientesMouseClicked
-        int filaSeleccionada = tbClientes.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            return;
-        }
-
-        String id = tableModel.getValueAt(filaSeleccionada, 0).toString();
-        String nombre = tableModel.getValueAt(filaSeleccionada, 1).toString();
-        String apPaterno = tableModel.getValueAt(filaSeleccionada, 2).toString();
-        String apMaterno = tableModel.getValueAt(filaSeleccionada, 3).toString();
-
-        txtIdCliente.setText(id);
-        txtNombres.setText(nombre);
-        txtApellidoPaterno.setText(apPaterno);
-        txtApellidoMaterno.setText(apMaterno);
-    }//GEN-LAST:event_tbClientesMouseClicked
-
-    private void btnModificarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarClienteActionPerformed
+    private void btnModificarClienteAction() {
+        if (!validarClienteSeleccionado()) return;
+        if (!validarCamposCliente(false)) return;
         
-        // Validar que se seleccionó un cliente
-        if (txtIdCliente.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente de la tabla.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        String[] datos = obtenerDatosCliente();
 
-        // Obtener datos de la UI y limpiar espacios
-        String nombre = txtNombres.getText().trim();
-        String apPaterno = txtApellidoPaterno.getText().trim();
-        String apMaterno = txtApellidoMaterno.getText().trim();
-
-        // Validar campos (Nombre es obligatorio)
-        if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo 'Nombres' no puede estar vacío.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            txtNombres.requestFocus();
-            return;
-        }
-        
-        if (apPaterno.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo 'Apellido Paterno' no puede estar vacío.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            txtApellidoPaterno.requestFocus();
-            return;
-        }
-
-        // Si todo es válido, llamar al controlador
         try {
             int id = Integer.parseInt(txtIdCliente.getText());
-            controlador.modificarCliente(id, nombre, apPaterno, apMaterno);
-            JOptionPane.showMessageDialog(this, "Cliente modificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            controlador.modificarCliente(id, datos[0], datos[1], datos[2]);
             actualizarTabla();
             limpiarCampos();
-
-        } catch (NumberFormatException e) {
-             JOptionPane.showMessageDialog(this, "El ID del cliente no es válido.", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al modificar el cliente: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Cliente modificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnModificarClienteActionPerformed
+    }
 
-    private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
-        // Validar que se seleccionó un cliente
-        if (txtIdCliente.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente de la tabla.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Pedir confirmación
-        int confirmacion = JOptionPane.showConfirmDialog(this, 
-                "¿Está seguro de que desea eliminar a este cliente?", 
+    private void btnEliminarClienteAction() {
+        if (!validarClienteSeleccionado()) return;
+
+        if (JOptionPane.showConfirmDialog(this, 
+                "¿Está seguro de eliminar este cliente?", 
                 "Confirmar Eliminación", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.WARNING_MESSAGE);
-        
-        if (confirmacion != JOptionPane.YES_OPTION) {
-            return; 
-        }
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION)
+            return;
 
-        // Si se confirma, llamar al controlador
         try {
             int id = Integer.parseInt(txtIdCliente.getText());
             controlador.eliminarCliente(id);
-            JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             actualizarTabla();
             limpiarCampos();
-
-        } catch (NumberFormatException e) {
-             JOptionPane.showMessageDialog(this, "El ID del cliente no es válido.", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al eliminar el cliente: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnEliminarClienteActionPerformed
-
-    private void btnLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCamposActionPerformed
-        limpiarCampos();
-    }//GEN-LAST:event_btnLimpiarCamposActionPerformed
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEliminarCliente;
-    private javax.swing.JButton btnGuardarCliente;
-    private javax.swing.JButton btnLimpiarCampos;
-    private javax.swing.JButton btnModificarCliente;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel pnlDatosCliente;
-    private javax.swing.JTable tbClientes;
-    private javax.swing.JTextField txtApellidoMaterno;
-    private javax.swing.JTextField txtApellidoPaterno;
-    private javax.swing.JTextField txtIdCliente;
-    private javax.swing.JTextField txtNombres;
-    // End of variables declaration//GEN-END:variables
+    }
 }

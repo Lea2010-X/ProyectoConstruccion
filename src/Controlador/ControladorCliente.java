@@ -9,9 +9,9 @@ import java.util.List;
  * Controlador para la entidad Cliente.
  * Su función es coordinar la Vista (FrmClientes) con la capa de acceso a datos (ClienteDAO).
  */
-public final class ControladorCliente {
+public final class ControladorCliente extends ControladorBase {
 
-    private ClienteDAO clienteDAO; // Atributo privado
+    private ClienteDAO clienteDAO;
 
     /**
      * Constructor estándar para la aplicación.
@@ -19,6 +19,7 @@ public final class ControladorCliente {
      */
     public ControladorCliente() {
         this.clienteDAO = new ClienteDAO();
+        validarDependencias();
     }
     
     /**
@@ -26,7 +27,15 @@ public final class ControladorCliente {
      * @param clienteDAO Un DAO (puede ser uno real o un mock).
      */
     public ControladorCliente(ClienteDAO clienteDAO) {
-        this.clienteDAO = clienteDAO; // Usa el DAO "inyectado"
+        this.clienteDAO = clienteDAO;
+        validarDependencias();
+    }
+
+    @Override
+    protected void validarDependencias() {
+        if (this.clienteDAO == null) {
+            throw new IllegalStateException("ClienteDAO no puede ser nulo");
+        }
     }
 
     /**

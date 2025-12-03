@@ -14,15 +14,15 @@ import Modelo.*;
 /**
  * Esta clase maneja toda la lógica de acceso a datos para la entidad Cliente.
  */
-public class ClienteDAO {
-	private CConexion conector;
+public class ClienteDAO extends BaseDAO {
 	
 	/**
      * Constructor estándar para la aplicación.
      * Usa la conexión de producción.
      */
+
     public ClienteDAO() {
-        this.conector = new CConexion();
+        super();
     }
 
     /**
@@ -30,7 +30,7 @@ public class ClienteDAO {
      * @param conector Un conector de base de datos (ej. uno de prueba).
      */
     public ClienteDAO(CConexion conector) {
-        this.conector = conector;
+        super(conector);
     }
 
     /**
@@ -42,7 +42,7 @@ public class ClienteDAO {
         List<ModeloCliente> clientes = new ArrayList<>();
         String sql = "SELECT idcliente, nombre, appaterno, apmaterno FROM cliente";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql)) {
 
@@ -66,7 +66,7 @@ public class ClienteDAO {
     public void agregarCliente(ModeloCliente cliente) throws SQLException {
         String consulta = "INSERT INTO cliente (nombre, appaterno, apmaterno) VALUES (?, ?, ?)";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setString(1, cliente.getNombre());
@@ -84,7 +84,7 @@ public class ClienteDAO {
     public void modificarCliente(ModeloCliente cliente) throws SQLException {
         String consulta = "UPDATE cliente SET nombre = ?, appaterno = ?, apmaterno = ? WHERE idcliente = ?";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setString(1, cliente.getNombre());
@@ -103,7 +103,7 @@ public class ClienteDAO {
     public void eliminarCliente(int idCliente) throws SQLException {
         String consulta = "DELETE FROM cliente WHERE idcliente = ?";
 
-        try (Connection conn = conector.estableceConexion();
+        try (Connection conn = getConnection();
             CallableStatement cs = conn.prepareCall(consulta)) {
 
             cs.setInt(1, idCliente);
@@ -121,8 +121,8 @@ public class ClienteDAO {
         List<ModeloCliente> clientes = new ArrayList<>();
         String consulta = "SELECT idcliente, nombre, appaterno, apmaterno FROM cliente WHERE nombre LIKE CONCAT('%', ?, '%')";
 
-        try (Connection conn = conector.estableceConexion();
-             PreparedStatement ps = conn.prepareStatement(consulta)) {
+        try (Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(consulta)) {
             
             ps.setString(1, nombre);
             try (ResultSet rs = ps.executeQuery()) {

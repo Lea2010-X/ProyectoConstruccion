@@ -191,9 +191,6 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
             modeloTabla.setRowCount(0);
             
             for (ModeloDetalleVenta item : reporte.getItems()) {
-                double subtotal = item.getSubtotal();
-                double iva = subtotal * Constantes.TASA_IVA;
-                double total = subtotal + iva;
 
                 modeloTabla.addRow(new Object[]{
                     item.getIdFactura(),
@@ -202,7 +199,7 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
                     item.getCantidad(),
                     item.getPrecioVenta(),
                     item.getSubtotal(),
-                    String.format("%.2f", total)
+                    String.format("%.2f", item.getTotal())
                 });
             }
             

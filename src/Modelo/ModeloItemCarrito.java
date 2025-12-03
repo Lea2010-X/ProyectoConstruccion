@@ -24,10 +24,9 @@ public final class ModeloItemCarrito {
      * @param nombreProducto Nombre del producto (de la BD)
      * @param precioVenta Precio de venta (del producto en BD)
      * @param cantidad Cantidad seleccionada (ingresada por usuario)
-     * @param subtotal Subtotal calculado (cantidad * precio)
      * @throws IllegalArgumentException si la cantidad es inválida
      */
-    public ModeloItemCarrito(int idProducto, String nombreProducto, double precioVenta, int cantidad, double subtotal) {
+    public ModeloItemCarrito(int idProducto, String nombreProducto, double precioVenta, int cantidad) {
         if (cantidad <= 0) {
             throw new IllegalArgumentException("La cantidad debe ser mayor a cero");
         }
@@ -36,7 +35,7 @@ public final class ModeloItemCarrito {
         this.nombreProducto = nombreProducto;
         this.precioVenta = precioVenta;
         this.cantidad = cantidad;
-        this.subtotal = subtotal;
+        this.subtotal = precioVenta * cantidad;
     }
 
     public int getIdProducto() {

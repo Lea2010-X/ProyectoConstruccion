@@ -112,4 +112,20 @@ public final class ControladorVenta extends ControladorBase {
             );
         }
     }
+
+    public double calcularTotalVenta(List<ModeloItemCarrito> items) {
+        double sumaSubtotales = 0;
+        for (ModeloItemCarrito item : items) {
+            sumaSubtotales += item.getSubtotal();
+        }
+        return sumaSubtotales + (sumaSubtotales * Util.Constantes.TASA_IVA);
+    }
+
+    public double calcularIVAVenta(List<ModeloItemCarrito> items) {
+        double sumaSubtotales = 0;
+        for (ModeloItemCarrito item : items) {
+            sumaSubtotales += item.getSubtotal();
+        }
+        return sumaSubtotales * Util.Constantes.TASA_IVA;
+    }
 }

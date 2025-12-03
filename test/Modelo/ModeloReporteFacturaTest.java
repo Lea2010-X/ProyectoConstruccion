@@ -28,14 +28,14 @@ public class ModeloReporteFacturaTest {
         comprobante.setCliente(cliente);
         comprobante.setItems(items);
         comprobante.setIva(18.0);
-        comprobante.setTotal(118.0);
+        comprobante.setSubtotal(118.0);
         
         assertEquals(100, comprobante.getIdFactura());
         assertEquals(fecha, comprobante.getFechaFactura());
         assertEquals(cliente, comprobante.getCliente());
         assertEquals(items, comprobante.getItems());
         assertEquals(18.0, comprobante.getIva());
-        assertEquals(118.0, comprobante.getTotal());
+        assertEquals(118.0, comprobante.getSubtotal());
     }
     
     @Test
@@ -73,13 +73,13 @@ public class ModeloReporteFacturaTest {
         comprobante.setFechaFactura(new Date());
         comprobante.setCliente(cliente);
         comprobante.setItems(items);
-        comprobante.setTotal(100.0);
+        comprobante.setSubtotal(100.0);
         comprobante.setIva(18.0);
         
         assertNotNull(comprobante.getCliente());
         assertEquals("Ana", comprobante.getCliente().getNombre());
         assertEquals(1, comprobante.getItems().size());
-        assertEquals(100.0, comprobante.getTotal());
+        assertEquals(100.0, comprobante.getSubtotal());
     }
     
     @Test
@@ -92,7 +92,7 @@ public class ModeloReporteFacturaTest {
         assertNull(comprobante.getCliente());
         assertNull(comprobante.getItems());
         assertEquals(0.0, comprobante.getIva());
-        assertEquals(0.0, comprobante.getTotal());
+        assertEquals(0.0, comprobante.getSubtotal());
     }
 }
 

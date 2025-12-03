@@ -62,4 +62,9 @@ public class ModeloDetalleVenta {
     public void setSubtotal(double subtotal) { 
         this.subtotal = subtotal;
     }
+
+    public double getTotal() {
+        double ivaCalculado = this.subtotal * Util.Constantes.TASA_IVA;
+        return this.subtotal + ivaCalculado;
+    }
 }

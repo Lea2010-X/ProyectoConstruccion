@@ -1,5 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ProyectoConstruccion" default="default" basedir=".">
+<project name="ProyectoConstruccion" default="default" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
     <description>Builds, tests, and runs the project ProyectoConstruccion.</description>
     <import file="nbproject/build-impl.xml"/>
+    
+    <!-- JaCoCo properties -->
+    <property name="jacoco.version" value="0.8.12"/>
+    <property name="jacoco.dir" value="${basedir}/libs/jacoco"/>
+    <property name="jacoco.jar" value="${jacoco.dir}/jacocoant.jar"/>
+    <property name="jacoco.exec.file" value="${build.dir}/jacoco/jacoco.exec"/>
+    <property name="jacoco.report.dir" value="${build.dir}/jacoco"/>
+    
+    <!-- Download JaCoCo if not present -->
+    <target name="download-jacoco" unless="jacoco.present">
+        <mkdir dir="${jacoco.dir}"/>
+        <get src="https://repo1.maven.org/maven2/org/jacoco/org.jacoco.ant/${jacoco.version}/org.jacoco.ant-${jacoco.version}-nodeps.jar"
+             dest="${jacoco.jar}"
+             skipexisting="true"
+             verbose="true"/>
+        <get src="https://repo1.maven.org/maven2/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar"
+             dest="${jacoco.dir}/jacocoagent.jar"
+             skipexisting="true"
+             verbose="true"/>
+    </target>
+    
+    <!-- Check if JaCoCo is present -->
+    <target name="check-jacoco">
+        <available file="${jacoco.jar}" property="jacoco.present"/>
+    </target>
+    
+    <!-- Initialize JaCoCo -->
+    <target name="init-jacoco" depends="check-jacoco,download-jacoco">
+        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+            <classpath path="${jacoco.jar}"/>
+        </taskdef>
+    </target>
+    
+    <!-- Override the test target to include JaCoCo coverage -->
+    <target name="test-with-coverage" depends="init-jacoco,compile-test" description="Run tests with JaCoCo coverage">
+        <mkdir dir="${jacoco.report.dir}"/>
+        <mkdir dir="${build.test.results.dir}"/>
+        
+        <!-- Run tests with JaCoCo agent -->
+        <jacoco:coverage destfile="${jacoco.exec.file}">
+            <junit printsummary="yes" haltonfailure="no" showoutput="true" fork="true" forkmode="once">
+                <classpath>
+                    <path path="${run.test.classpath}"/>
+                </classpath>
+                <batchtest todir="${build.test.results.dir}">
+                    <fileset dir="${test.src.dir}">
+                        <include name="**/*Test.java"/>
+                    </fileset>
+                    <formatter type="xml"/>
+                    <formatter type="plain" usefile="false"/>
+                </batchtest>
+            </junit>
+        </jacoco:coverage>
+        
+        <!-- Generate coverage reports -->
+        <jacoco:report>
+            <executiondata>
+                <file file="${jacoco.exec.file}"/>
+            </executiondata>
+            <structure name="ProyectoConstruccion">
+                <classfiles>
+                    <fileset dir="${build.classes.dir}">
+                        <exclude name="**/*Test.class"/>
+                    </fileset>
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="${src.dir}"/>
+                </sourcefiles>
+            </structure>
+            <html destdir="${jacoco.report.dir}/html"/>
+            <xml destfile="${jacoco.report.dir}/jacoco.xml"/>
+            <csv destfile="${jacoco.report.dir}/jacoco.csv"/>
+        </jacoco:report>
+        
+        <echo message="Coverage report generated at: ${jacoco.report.dir}/html/index.html"/>
+        <echo message="Coverage XML for SonarQube: ${jacoco.report.dir}/jacoco.xml"/>
+    </target>
 </project>

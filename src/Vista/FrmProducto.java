@@ -68,7 +68,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar los productos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al cargar los productos: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -139,7 +139,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, 
                 "El precio y el stock deben ser números válidos.", 
-                "Error de Formato", JOptionPane.ERROR_MESSAGE);
+                Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -356,11 +356,11 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         
         try {
             controlador.agregarProducto(nombre, precio, stock);
-            JOptionPane.showMessageDialog(this, "Producto guardado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_GUARDADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
             actualizarTabla();
             limpiarCampos();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el producto: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al guardar el producto: " + e.getMessage(), Mensajes.MSG_ERROR_BD, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -402,11 +402,11 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         try {
             int id = Integer.parseInt(txtIdProducto.getText());
             controlador.modificarProducto(id, nombre, precio, stock);
-            JOptionPane.showMessageDialog(this, "Producto modificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_MODIFICADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
             actualizarTabla();
             limpiarCampos();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al modificar el producto: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al modificar el producto: " + e.getMessage(), Mensajes.MSG_ERROR_BD, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -416,11 +416,11 @@ public class FrmProducto extends javax.swing.JInternalFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         if (txtIdProducto.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un producto de la tabla.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_REGISTRO, "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea eliminar este producto?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int confirmacion = JOptionPane.showConfirmDialog(this, Mensajes.MSG_CONFIRMAR_ELIMINACION, Mensajes.TITULO_CONFIRMAR, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         
         if (confirmacion != JOptionPane.YES_OPTION) {
             return;
@@ -430,14 +430,14 @@ public class FrmProducto extends javax.swing.JInternalFrame {
             int id = Integer.parseInt(txtIdProducto.getText());
             controlador.eliminarProducto(id);
 
-            JOptionPane.showMessageDialog(this, "Producto eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_ELIMINADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
             actualizarTabla();
             limpiarCampos();
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El ID del producto no es válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El ID del producto no es válido.", Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al eliminar el producto: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al eliminar el producto: " + e.getMessage(), Mensajes.MSG_ERROR_BD, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 

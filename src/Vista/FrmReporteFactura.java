@@ -5,6 +5,7 @@ import Modelo.ModeloReporteFactura;
 import Modelo.ModeloDetalleVenta;
 import Util.Constantes;
 import Util.GeneradorPDF;
+import Util.Mensajes;
 import Util.TemaModerno;
 import com.itextpdf.text.DocumentException;
 import java.awt.Desktop;
@@ -294,7 +295,7 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
         
         String numFacturaStr = txtBuscar.getText().trim();
         if (numFacturaStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un número de factura.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_INGRESE_NUM_FACTURA, Mensajes.TITULO_ADVERTENCIA, JOptionPane.WARNING_MESSAGE);
             txtBuscar.requestFocus();
             return;
         }
@@ -303,7 +304,7 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
             int numFactura = Integer.parseInt(numFacturaStr);
             
             if (numFactura <= 0) {
-                JOptionPane.showMessageDialog(this, "Debe ingresar un número de factura positivo.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, Mensajes.MSG_NUMERO_POSITIVO, Mensajes.TITULO_ADVERTENCIA, JOptionPane.WARNING_MESSAGE);
                 txtBuscar.requestFocus();
                 return;
             }
@@ -337,51 +338,46 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                 btnGenerarPDF.setEnabled(true);
                 
             } else {
-                JOptionPane.showMessageDialog(this, "No se encontró la factura N°: " + numFactura, "Búsqueda Fallida", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, Mensajes.MSG_FACTURA_NO_ENCONTRADA + numFactura, Mensajes.TITULO_ADVERTENCIA, JOptionPane.INFORMATION_MESSAGE);
                 limpiarCampos();
             }
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un número válido (solo dígitos).", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_NUMERO_INVALIDO, Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
             limpiarCampos();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar la factura: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
             limpiarCampos();
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
         if (reporteActual == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe buscar una factura primero antes de generar el PDF.", 
-                "Sin Datos", 
+            JOptionPane.showMessageDialog(this,
+                    Mensajes.MSG_REPORTE_REQUERIDO_PDF,
+                    Mensajes.TITULO_ADVERTENCIA,
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         try {
             String rutaPDF = GeneradorPDF.generarPDFReporteFactura(reporteActual);
-            
-            int respuesta = JOptionPane.showConfirmDialog(this, 
-                "PDF generado exitosamente en:\n" + rutaPDF + "\n\n¿Desea abrir el archivo?", 
-                "PDF Generado", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.INFORMATION_MESSAGE);
-            
+
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    String.format(Mensajes.MSG_PDF_GENERADO_EXITO, rutaPDF),
+                    Mensajes.TITULO_PDF_GENERADO,
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE);
+
             if (respuesta == JOptionPane.YES_OPTION) {
                 abrirArchivo(rutaPDF);
             }
-            
-        } catch (DocumentException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al crear el documento PDF: " + e.getMessage(), 
-                "Error de PDF", 
-                JOptionPane.ERROR_MESSAGE);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al escribir el archivo PDF: " + e.getMessage(), 
-                "Error de Archivo", 
-                JOptionPane.ERROR_MESSAGE);
+
+        } catch (DocumentException | IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    Mensajes.MSG_ERROR_CREAR_PDF + e.getMessage(),
+                    Mensajes.TITULO_ERROR,
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGenerarPDFActionPerformed
 
@@ -396,15 +392,15 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(archivo);
             } else {
-                JOptionPane.showMessageDialog(this, 
-                    "No se puede abrir el archivo automáticamente.\nUbicación: " + rutaArchivo, 
+                JOptionPane.showMessageDialog(this,
+                        Mensajes.MSG_ERROR_ABRIR_ARCHIVO + "\nUbicación: " + rutaArchivo,
                     "Información", 
                     JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error al abrir el archivo: " + e.getMessage(), 
-                "Error", 
+                "Error al abrir el archivo: " + e.getMessage(),
+                    Mensajes.TITULO_ERROR,
                 JOptionPane.ERROR_MESSAGE);
         }
     }

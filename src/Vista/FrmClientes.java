@@ -238,7 +238,7 @@ public class FrmClientes extends JInternalFrame {
         String apMaterno = txtApellidoMaterno.getText().trim();
         
         if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre es requerido.", 
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_NOMBRE_REQUERIDO,
                 "Error de Validación", JOptionPane.WARNING_MESSAGE);
             txtNombres.requestFocus();
             return false;
@@ -246,13 +246,13 @@ public class FrmClientes extends JInternalFrame {
         
         if (validarApellidos) {
             if (apPaterno.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El apellido paterno es requerido.", 
+                JOptionPane.showMessageDialog(this, Mensajes.MSG_APPATERNO_REQUERIDO,
                     "Error de Validación", JOptionPane.WARNING_MESSAGE);
                 txtApellidoPaterno.requestFocus();
                 return false;
             }
             if (apMaterno.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El apellido materno es requerido.", 
+                JOptionPane.showMessageDialog(this, Mensajes.MSG_APMATERNO_REQUERIDO,
                     "Error de Validación", JOptionPane.WARNING_MESSAGE);
                 txtApellidoMaterno.requestFocus();
                 return false;
@@ -296,9 +296,9 @@ public class FrmClientes extends JInternalFrame {
             controlador.agregarCliente(datos[0], datos[1], datos[2]);
             actualizarTabla();
             limpiarCampos();
-            JOptionPane.showMessageDialog(this, "Cliente guardado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_GUARDADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -313,7 +313,7 @@ public class FrmClientes extends JInternalFrame {
             controlador.modificarCliente(id, datos[0], datos[1], datos[2]);
             actualizarTabla();
             limpiarCampos();
-            JOptionPane.showMessageDialog(this, "Cliente modificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_MODIFICADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -322,9 +322,9 @@ public class FrmClientes extends JInternalFrame {
     private void btnEliminarClienteAction() {  
         if (!validarClienteSeleccionado()) return;
 
-        if (JOptionPane.showConfirmDialog(this, 
-                "¿Está seguro de eliminar este cliente?", 
-                "Confirmar Eliminación", 
+        if (JOptionPane.showConfirmDialog(this,
+                Mensajes.MSG_CONFIRMAR_ELIMINACION,
+                Mensajes.TITULO_CONFIRMAR,
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION)
             return;
@@ -334,7 +334,7 @@ public class FrmClientes extends JInternalFrame {
             controlador.eliminarCliente(id);
             actualizarTabla();
             limpiarCampos();
-            JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_ELIMINADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

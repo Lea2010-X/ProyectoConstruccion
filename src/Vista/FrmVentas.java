@@ -5,6 +5,7 @@ import Modelo.ModeloCliente;
 import Modelo.ModeloItemCarrito;
 import Modelo.ModeloProductoInventario;
 import Util.Constantes;
+import Util.Mensajes;
 import Util.TemaModerno;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 @SuppressWarnings("serial")
 public class FrmVentas extends javax.swing.JInternalFrame {
 
-    private final ControladorVenta controlador;
+    private final transient ControladorVenta controlador;
     private final DefaultTableModel modeloClientes;
     private final DefaultTableModel modeloProductos;
     private final DefaultTableModel modeloResumenVenta;
@@ -81,7 +82,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             int ultimoID = controlador.obtenerUltimaFactura();
             lblUltimaFactura.setText(String.valueOf(ultimoID));
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar la última factura: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al cargar la última factura: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
             lblUltimaFactura.setText("Error");
         }
     }
@@ -690,7 +691,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar productos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al buscar productos: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_txtBuscarProductosKeyReleased
 
@@ -720,7 +721,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar clientes: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al buscar clientes: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_txtBuscarClienteKeyReleased
 
@@ -763,7 +764,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             String nombreProducto = txtSNombreProducto.getText();
 
             if (cantidad <= 0) {
-                JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero.", "Error de Lógica", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, Mensajes.MSG_CANTIDAD_MAYOR_CERO, "Error de Lógica", JOptionPane.WARNING_MESSAGE);
                 txtCantidadVenta.requestFocus();
                 return;
             }
@@ -774,14 +775,14 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             }
 
             if (cantidad > stockDisponible) {
-                JOptionPane.showMessageDialog(this, "La cantidad de venta no puede ser mayor al stock disponible (" + stockDisponible + ").", "Stock Insuficiente", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, Mensajes.MSG_STOCK_INSUFICIENTE + stockDisponible + ").", "Stock Insuficiente", JOptionPane.WARNING_MESSAGE);
                 txtCantidadVenta.requestFocus();
                 return;
             }
 
             for (int i = 0; i < modeloResumenVenta.getRowCount(); i++) {
                 if (((Integer)modeloResumenVenta.getValueAt(i, 0)) == idProducto) {
-                    JOptionPane.showMessageDialog(this, "El producto '" + nombreProducto + "' ya está en el resumen.", "Producto Duplicado", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "El producto '" + nombreProducto + "' ya está en el resumen.", Mensajes.MSG_PRODUCTO_DUPLICADO, JOptionPane.WARNING_MESSAGE);
                     return;
                 }
             }
@@ -798,7 +799,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             calcularTotalPagar();
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La cantidad y el precio deben ser números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La cantidad y el precio deben ser números válidos.", Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
@@ -808,19 +809,19 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             modeloResumenVenta.removeRow(filaSeleccionada);
             calcularTotalPagar();
         } else {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_REGISTRO, Mensajes.TITULO_ADVERTENCIA, JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarResumenVentaActionPerformed
 
     private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
 
         if (txtSIDCliente.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente.", "Venta Fallida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_CLIENTE, Mensajes.TITULO_ADVERTENCIA, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (modeloResumenVenta.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Debe agregar productos a la venta.", "Venta Fallida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_CARRITO_VACIO, Mensajes.TITULO_ADVERTENCIA, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -840,14 +841,14 @@ public class FrmVentas extends javax.swing.JInternalFrame {
 
             controlador.procesarVenta(idCliente, itemsVenta);
 
-            JOptionPane.showMessageDialog(this, "Venta Realizada Correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_VENTA_EXITO, "Éxito", JOptionPane.INFORMATION_MESSAGE);
             limpiarCamposLuegoVenta();
             actualizarUltimaFactura();
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Error en los datos del cliente. ID no válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error en los datos del cliente. ID no válido.", Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al procesar la venta: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al procesar la venta: " + e.getMessage(), Mensajes.MSG_ERROR_BD, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCobrarActionPerformed
 

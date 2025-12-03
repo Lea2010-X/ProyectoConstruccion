@@ -15,8 +15,6 @@ import javax.swing.border.Border;
  * Proporciona métodos para estilizar componentes con colores, fuentes y bordes modernos.
  */
 public class TemaModerno {
-    
-    // Paleta de colores moderna (Material Design)
     public static final Color COLOR_PRIMARIO = new Color(33, 150, 243);      // Azul
     public static final Color COLOR_PRIMARIO_OSCURO = new Color(21, 101, 192); // Azul oscuro
     public static final Color COLOR_SECUNDARIO = new Color(76, 175, 80);     // Verde
@@ -27,12 +25,10 @@ public class TemaModerno {
     public static final Color COLOR_TEXTO_CLARO = new Color(117, 117, 117);  // Gris medio
     public static final Color COLOR_BORDE = new Color(189, 189, 189);        // Gris borde
     
-    // Fuentes modernas
     public static final Font FUENTE_TITULO = new Font("Segoe UI", Font.BOLD, 18);
     public static final Font FUENTE_SUBTITULO = new Font("Segoe UI", Font.BOLD, 14);
     public static final Font FUENTE_NORMAL = new Font("Segoe UI", Font.PLAIN, 12);
-    public static final Font FUENTE_PEQUENA = new Font("Segoe UI", Font.PLAIN, 10);
-    
+
     /**
      * Estiliza un botón con tema moderno.
      * 

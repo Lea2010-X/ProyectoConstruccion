@@ -36,7 +36,6 @@ public final class Mensajes {
 
     // Confirmaciones
     public static final String MSG_CONFIRMAR_ELIMINACION = "¿Está seguro de que desea eliminar este registro?";
-    public static final String MSG_CONFIRMAR_SALIDA = "¿Está seguro de que desea salir del sistema?";
     public static final String TITULO_CONFIRMAR = "Confirmar Acción";
 
     // Mensajes de Éxito

@@ -5,6 +5,7 @@ import Modelo.ModeloDetalleVenta;
 import Modelo.ModeloReporteVentasPeriodo;
 import Util.Constantes;
 import Util.GeneradorPDF;
+import Util.Mensajes;
 import Util.TemaModerno;
 import com.itextpdf.text.DocumentException;
 import java.awt.Desktop;
@@ -173,12 +174,12 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
         Date fechaHasta = txtHasta.getDate();
 
         if (fechaDesde == null || fechaHasta == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un rango de fechas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_RANGO_FECHAS, Mensajes.TITULO_ADVERTENCIA, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (fechaDesde.after(fechaHasta)) {
-            JOptionPane.showMessageDialog(this, "La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_FECHAS_INCOHERENTES, Mensajes.TITULO_ADVERTENCIA, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -210,45 +211,41 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
             btnGenerarPDF.setEnabled(true);
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
+    private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {
+        // Validación previa
         if (reporteActual == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe generar un reporte primero antes de crear el PDF.", 
-                "Sin Datos", 
-                JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    Mensajes.MSG_REPORTE_REQUERIDO_PDF,
+                    Mensajes.TITULO_ADVERTENCIA,
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         try {
             String rutaPDF = GeneradorPDF.generarPDFReporteVentasPeriodo(reporteActual);
-            
-            int respuesta = JOptionPane.showConfirmDialog(this, 
-                "PDF generado exitosamente en:\n" + rutaPDF + "\n\n¿Desea abrir el archivo?", 
-                "PDF Generado", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.INFORMATION_MESSAGE);
-            
+
+            // Mensaje de éxito formateado
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    String.format(Mensajes.MSG_PDF_GENERADO_EXITO, rutaPDF),
+                    Mensajes.TITULO_PDF_GENERADO,
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE);
+
             if (respuesta == JOptionPane.YES_OPTION) {
                 abrirArchivo(rutaPDF);
             }
-            
-        } catch (DocumentException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al crear el documento PDF: " + e.getMessage(), 
-                "Error de PDF", 
-                JOptionPane.ERROR_MESSAGE);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al escribir el archivo PDF: " + e.getMessage(), 
-                "Error de Archivo", 
-                JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnGenerarPDFActionPerformed
 
+        } catch (DocumentException | IOException e) { // <--- Multi-Catch aplicado
+            JOptionPane.showMessageDialog(this,
+                    Mensajes.MSG_ERROR_CREAR_PDF + e.getMessage(),
+                    Mensajes.TITULO_ERROR,
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
     /**
      * Abre un archivo con la aplicación predeterminada del sistema.
      * 
@@ -260,15 +257,15 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(archivo);
             } else {
-                JOptionPane.showMessageDialog(this, 
-                    "No se puede abrir el archivo automáticamente.\nUbicación: " + rutaArchivo, 
+                JOptionPane.showMessageDialog(this,
+                        Mensajes.MSG_ERROR_ABRIR_ARCHIVO + "\nUbicación: " + rutaArchivo,
                     "Información", 
                     JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error al abrir el archivo: " + e.getMessage(), 
-                "Error", 
+                "Error al abrir el archivo: " + e.getMessage(),
+                    Mensajes.TITULO_ERROR,
                 JOptionPane.ERROR_MESSAGE);
         }
     }

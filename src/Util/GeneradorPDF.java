@@ -94,7 +94,7 @@ public class GeneradorPDF {
         totales.setAlignment(Element.ALIGN_RIGHT);
         totales.add(new Chunk("IVA: $" + String.format("%.2f", reporte.getIva()) + "\n", FONT_NORMAL));
         totales.add(new Chunk("TOTAL: $" + String.format("%.2f", 
-        (reporte.getTotal()*Constantes.TASA_IVA)+reporte.getTotal()), FONT_SUBTITULO));
+        (reporte.getSubtotal()*Constantes.TASA_IVA)+reporte.getSubtotal()), FONT_SUBTITULO));
         document.add(totales);
         
         Paragraph piePagina = new Paragraph();

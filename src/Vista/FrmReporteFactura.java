@@ -3,7 +3,6 @@ package Vista;
 import Controlador.ControladorReportes;
 import Modelo.ModeloReporteFactura;
 import Modelo.ModeloDetalleVenta;
-import Util.Constantes;
 import Util.GeneradorPDF;
 import Util.Mensajes;
 import Util.TemaModerno;
@@ -328,19 +327,17 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                 
                 modeloTablaProductos.setRowCount(0);
                 for (ModeloDetalleVenta item : comprobante.getItems()) {
-                    double total = (item.getSubtotal()*Constantes.TASA_IVA)+item.getSubtotal();
                     modeloTablaProductos.addRow(new Object[]{
                         item.getNombreProducto(),
                         item.getCantidad(),
                         item.getPrecioVenta(),
                         item.getSubtotal(),
-                        total
+                        item.getTotal()
                     });
                 }
                 
                 lbMostrarIVA.setText(String.valueOf(comprobante.getIva()));
-                lbMostrarTotal.setText(String.valueOf((comprobante.getTotal()*Constantes.TASA_IVA)+comprobante.getTotal()));
-                
+                lbMostrarTotal.setText(String.format("%.2f", comprobante.getTotal()));
                 btnGenerarPDF.setEnabled(true);
                 
             } else {

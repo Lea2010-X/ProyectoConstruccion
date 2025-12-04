@@ -15,7 +15,7 @@ public class ModeloReporteFactura {
     private ModeloCliente cliente;
     private List<ModeloDetalleVenta> items;
     private double iva;
-    private double total;
+    private double subtotal;
 
     public int getIdFactura() { 
         return idFactura; 
@@ -57,11 +57,16 @@ public class ModeloReporteFactura {
         this.iva = iva; 
     }
 
-    public double getTotal() { 
-        return total; 
+    public double getSubtotal() {
+        return subtotal;
     }
     
-    public void setTotal(double total) { 
-        this.total = total; 
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public double getTotal() {
+        double ivaCalculado = this.subtotal * Util.Constantes.TASA_IVA;
+        return this.subtotal + ivaCalculado;
     }
 }

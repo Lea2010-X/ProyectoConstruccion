@@ -143,16 +143,4 @@ public class TemaModerno {
                 etiqueta.setFont(FUENTE_NORMAL);
         }
     }
-    
-    /**
-     * Obtiene un borde moderno redondeado.
-     * 
-     * @return Border moderno
-     */
-    public static Border obtenerBordeModerno() {
-        return BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(COLOR_BORDE, 1),
-            BorderFactory.createEmptyBorder(8, 8, 8, 8)
-        );
-    }
 }

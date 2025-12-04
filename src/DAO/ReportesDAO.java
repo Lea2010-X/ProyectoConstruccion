@@ -78,7 +78,7 @@ public class ReportesDAO extends BaseDAO {
                     
                     double iva = Double.parseDouble(formato.format(totalFactura * Constantes.TASA_IVA));
                     
-                    comprobante.setTotal(Double.parseDouble(formato.format(totalFactura)));
+                    comprobante.setSubtotal(Double.parseDouble(formato.format(totalFactura)));
                     comprobante.setIva(iva);
                 }
             }

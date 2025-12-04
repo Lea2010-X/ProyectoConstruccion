@@ -4,7 +4,6 @@ import Controlador.ControladorVenta;
 import Modelo.ModeloCliente;
 import Modelo.ModeloItemCarrito;
 import Modelo.ModeloProductoInventario;
-import Util.Constantes;
 import Util.Mensajes;
 import Util.TemaModerno;
 import java.sql.SQLException;
@@ -816,7 +815,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             calcularTotalPagar();
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La cantidad y el precio deben ser números válidos.", Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_NUMERO_INVALIDO, Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
@@ -858,7 +857,7 @@ public class FrmVentas extends javax.swing.JInternalFrame {
 
             controlador.procesarVenta(idCliente, itemsVenta);
 
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_VENTA_EXITO, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_VENTA_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
             limpiarCamposLuegoVenta();
             actualizarUltimaFactura();
 

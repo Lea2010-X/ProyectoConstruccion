@@ -16,7 +16,6 @@ import java.util.List;
  * Coordina las Vistas de reportes con el ReportesDAO.
  */
 public final class ControladorReportes extends ControladorBase {
- 
     private ReportesDAO reportesDAO;
     private DecimalFormat formato = Constantes.FORMATEADOR_DECIMAL;
 

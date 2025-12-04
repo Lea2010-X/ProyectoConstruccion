@@ -93,12 +93,7 @@ public final class ControladorVenta extends ControladorBase {
      * @throws SQLException si algo falla durante la transacción.
      */
     public void procesarVenta(int idCliente, List<ModeloItemCarrito> itemsVenta) throws SQLException {
-        
-        // Lógica de negocio:
-        // 1. Crear la Factura
         int idFacturaCreada = facturaDAO.crearFactura(idCliente);
-        
-        // 2. Guardar cada detalle y actualizar stock
         for (ModeloItemCarrito item : itemsVenta) {
             detalleDAO.agregarDetalle(
                     idFacturaCreada,

@@ -3,7 +3,6 @@ package Vista;
 import Controlador.ControladorReportes;
 import Modelo.ModeloDetalleVenta;
 import Modelo.ModeloReporteVentasPeriodo;
-import Util.Constantes;
 import Util.GeneradorPDF;
 import Util.Mensajes;
 import Util.TemaModerno;
@@ -224,8 +223,6 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
 
         try {
             String rutaPDF = GeneradorPDF.generarPDFReporteVentasPeriodo(reporteActual);
-
-            // Mensaje de éxito formateado
             int respuesta = JOptionPane.showConfirmDialog(this,
                     String.format(Mensajes.MSG_PDF_GENERADO_EXITO, rutaPDF),
                     Mensajes.TITULO_PDF_GENERADO,
@@ -236,7 +233,7 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
                 abrirArchivo(rutaPDF);
             }
 
-        } catch (DocumentException | IOException e) { // <--- Multi-Catch aplicado
+        } catch (DocumentException | IOException e) {
             JOptionPane.showMessageDialog(this,
                     Mensajes.MSG_ERROR_CREAR_PDF + e.getMessage(),
                     Mensajes.TITULO_ERROR,

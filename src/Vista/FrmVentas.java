@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-@SuppressWarnings("serial")
 public class FrmVentas extends javax.swing.JInternalFrame {
 
     private final transient ControladorVenta controlador;

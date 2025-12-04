@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
-@SuppressWarnings("serial")
 public class FrmClientes extends JInternalFrame {
 
     private ControladorCliente controlador;

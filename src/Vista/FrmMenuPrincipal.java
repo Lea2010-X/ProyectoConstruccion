@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-@SuppressWarnings("serial")
 public class FrmMenuPrincipal extends JFrame {
 
     private JPanel panelLateral;
@@ -106,7 +105,6 @@ public class FrmMenuPrincipal extends JFrame {
         btn.setMaximumSize(new Dimension(260, 45));
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Estilo base
         btn.setFocusPainted(false);
         btn.setBackground(new Color(32, 34, 43));
         btn.setForeground(new Color(220, 220, 220));

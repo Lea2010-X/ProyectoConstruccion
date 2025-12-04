@@ -14,7 +14,7 @@ public class ModeloProductoInventarioTest {
     public void testObtenerMontoPago() {
 
         ModeloProductoInventario producto = new ModeloProductoInventario();
-        producto.setNombreProducto("Producto Test"); // Ahora requerido por validación
+        producto.setNombreProducto("Producto Test"); 
         producto.setPrecioProducto(10.0);
         producto.setStockProducto(5);
     

@@ -323,7 +323,7 @@ public class FrmProducto extends JInternalFrame {
             limpiarCampos();
             JOptionPane.showMessageDialog(this, Mensajes.MSG_GUARDADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -348,7 +348,7 @@ public class FrmProducto extends JInternalFrame {
             limpiarCampos();
             JOptionPane.showMessageDialog(this, Mensajes.MSG_MODIFICADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -369,7 +369,7 @@ public class FrmProducto extends JInternalFrame {
             limpiarCampos();
             JOptionPane.showMessageDialog(this, Mensajes.MSG_ELIMINADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
 }

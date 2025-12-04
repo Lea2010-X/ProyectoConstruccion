@@ -71,13 +71,13 @@ public class GeneradorPDF {
         
         PdfPTable tabla = new PdfPTable(5);
         tabla.setWidthPercentage(100);
-        tabla.setWidths(new float[]{3, 1, 2, 2,3});
+        tabla.setWidths(new float[]{3, 2, 2, 2,3});
         
         agregarCeldaHeader(tabla, "Producto");
         agregarCeldaHeader(tabla, "Cantidad");
         agregarCeldaHeader(tabla, "Precio");
         agregarCeldaHeader(tabla, "Subtotal");
-        agregarCeldaHeader(tabla, "total");
+        agregarCeldaHeader(tabla, "Total");
         
         for (ModeloDetalleVenta item : reporte.getItems()) {
             agregarCeldaContenido(tabla, item.getNombreProducto());
@@ -156,7 +156,6 @@ public class GeneradorPDF {
             agregarCeldaContenido(tabla, String.valueOf(item.getCantidad()));
             agregarCeldaContenido(tabla, String.format("$%.2f", item.getPrecioVenta()));
             agregarCeldaContenido(tabla, String.format("$%.2f", item.getSubtotal()));
-            //se calcula el subtotal
             agregarCeldaContenido(tabla, String.format("$%.2f", (item.getSubtotal()*Constantes.TASA_IVA)+item.getSubtotal()));
         }
         

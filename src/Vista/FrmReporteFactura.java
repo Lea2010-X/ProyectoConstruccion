@@ -106,7 +106,6 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setTitle("Reporte de Factura");
 
-        // --- Panel de Búsqueda Centrado ---
         pnlIngresarNumeroDeFactura.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingresar Numero de Factura"));
 
         btnBuscar.setText("Buscar");
@@ -137,7 +136,6 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        // --- Etiquetas ---
         lbFactura.setFont(new java.awt.Font("Segoe UI", 1, 14));
         lbFactura.setText("Factura N°:");
         lbMostrarFactura.setFont(new java.awt.Font("Segoe UI", 0, 14));
@@ -148,7 +146,6 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
         lbMostrarFechaDeVenta.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lbMostrarFechaDeVenta.setText("...");
 
-        // --- Panel Datos Cliente ---
         pnlDatosCliente.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Cliente"));
         lbNombres.setFont(new java.awt.Font("Segoe UI", 1, 14));
         lbNombres.setText("Nombres:");
@@ -228,7 +225,6 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
             }
         });
 
-        // --- LAYOUT PRINCIPAL ---
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -248,16 +244,14 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                                         .addComponent(pnlDatosCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(pnlIngresarNumeroDeFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
-                                        // CAMBIO 1: Tabla ocupa todo el ancho
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
 
-                                        // CAMBIO 2: Grupo de Totales Alineado a la Derecha y Compacto
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGap(0, 0, Short.MAX_VALUE) // Empuja todo a la derecha
+                                                .addGap(0, 0, Short.MAX_VALUE) 
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(lbIVA)
                                                         .addComponent(lbTotal))
-                                                .addGap(15, 15, 15) // Espacio pequeño entre Etiqueta y Valor
+                                                .addGap(15, 15, 15) 
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(lbMostrarIVA)
                                                         .addComponent(lbMostrarTotal))))
@@ -284,12 +278,10 @@ public class FrmReporteFactura extends javax.swing.JInternalFrame {
                                 .addComponent(lbProductos)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 
-                                // CAMBIO 1: Altura aumentada a 300px y es flexible (Short.MAX_VALUE)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
 
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 
-                                // CAMBIO 2: Sin espacios grandes entre IVA y Total
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(lbIVA)
                                         .addComponent(lbMostrarIVA))

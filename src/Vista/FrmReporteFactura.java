@@ -69,14 +69,14 @@ public class FrmReporteFactura extends JInternalFrame {
 
         JPanel panelFacturaFecha = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
         JLabel lbFactura = new JLabel("Factura N°:");
-        lbFactura.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbFactura.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbMostrarFactura = new JLabel("...");
-        lbMostrarFactura.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lbMostrarFactura.setFont(TemaModerno.FUENTE_SUBTITULO);
 
         JLabel lbFechaDeVenta = new JLabel("Fecha de Venta:");
-        lbFechaDeVenta.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbFechaDeVenta.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbMostrarFechaDeVenta = new JLabel("...");
-        lbMostrarFechaDeVenta.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lbMostrarFechaDeVenta.setFont(TemaModerno.FUENTE_SUBTITULO);
 
         panelFacturaFecha.add(lbFactura);
         panelFacturaFecha.add(lbMostrarFactura);
@@ -91,19 +91,19 @@ public class FrmReporteFactura extends JInternalFrame {
         gbc.anchor = GridBagConstraints.WEST;
 
         JLabel lbNombres = new JLabel("Nombres:");
-        lbNombres.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbNombres.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbMostrarNombres = new JLabel("...");
-        lbMostrarNombres.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lbMostrarNombres.setFont(TemaModerno.FUENTE_SUBTITULO);
 
         JLabel lbApellidoPaterno = new JLabel("Ap. Paterno:");
-        lbApellidoPaterno.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbApellidoPaterno.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbMostrarApellidoPaterno = new JLabel("...");
-        lbMostrarApellidoPaterno.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lbMostrarApellidoPaterno.setFont(TemaModerno.FUENTE_SUBTITULO);
 
         JLabel lbApellidoMaterno = new JLabel("Ap. Materno:");
-        lbApellidoMaterno.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbApellidoMaterno.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbMostrarApellidoMaterno = new JLabel("...");
-        lbMostrarApellidoMaterno.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lbMostrarApellidoMaterno.setFont(TemaModerno.FUENTE_SUBTITULO);
 
         gbc.gridx = 0; gbc.gridy = 0;
         panelDatosCliente.add(lbNombres, gbc);
@@ -126,7 +126,7 @@ public class FrmReporteFactura extends JInternalFrame {
 
         JPanel panelTabla = new JPanel(new BorderLayout());
         JLabel lbProductos = new JLabel("Productos");
-        lbProductos.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbProductos.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbProductos.setBorder(new EmptyBorder(5, 0, 5, 0));
 
         tbProductos = new JTable(new DefaultTableModel(
@@ -145,14 +145,14 @@ public class FrmReporteFactura extends JInternalFrame {
 
         JPanel panelTotales = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 5));
         JLabel lbIVA = new JLabel("IVA:");
-        lbIVA.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbIVA.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbMostrarIVA = new JLabel("...");
-        lbMostrarIVA.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lbMostrarIVA.setFont(TemaModerno.FUENTE_SUBTITULO);
 
         JLabel lbTotal = new JLabel("Total:");
-        lbTotal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbTotal.setFont(TemaModerno.FUENTE_SUBTITULO);
         lbMostrarTotal = new JLabel("...");
-        lbMostrarTotal.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lbMostrarTotal.setFont(TemaModerno.FUENTE_SUBTITULO);
 
         panelTotales.add(lbIVA);
         panelTotales.add(lbMostrarIVA);

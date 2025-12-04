@@ -5,6 +5,8 @@ import Modelo.ModeloProductoInventario;
 import Util.Mensajes;
 import Util.TemaModerno;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.*;
@@ -31,23 +33,19 @@ public class FrmProducto extends JInternalFrame {
         actualizarTabla();
         aplicarTemaModerno();
     }
-    
-    /**
-     * Aplica el tema moderno a todos los componentes de la interfaz.
-     */
+
     private void aplicarTemaModerno() {
         TemaModerno.estilizarCampoTexto(txtIdProducto);
         TemaModerno.estilizarCampoTexto(txtNombreProducto);
         TemaModerno.estilizarCampoTexto(txtPrecioProducto);
         TemaModerno.estilizarCampoTexto(txtStockProducto);
-        
+
         TemaModerno.estilizarBoton(btnGuardar, "primario");
         TemaModerno.estilizarBoton(btnModificar, "secundario");
         TemaModerno.estilizarBoton(btnEliminar, "peligro");
         TemaModerno.estilizarBoton(btnLimpiarCampos, "advertencia");
-        
+
         TemaModerno.estilizarTabla(tbProductos);
-        
         TemaModerno.estilizarPanel(cardDatos, true);
     }
 
@@ -101,8 +99,8 @@ public class FrmProducto extends JInternalFrame {
         JScrollPane scrollTabla = new JScrollPane(tbProductos);
         scrollTabla.setBorder(new EmptyBorder(10, 0, 10, 0));
 
-        tbProductos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tbProductos.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
                 tableRowClicked();
             }
         });
@@ -139,19 +137,23 @@ public class FrmProducto extends JInternalFrame {
         return t;
     }
 
+    private void agregarEfectoHover(JButton btn, Color normal, Color hover) {
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setBackground(hover); }
+            public void mouseExited(MouseEvent e)  { btn.setBackground(normal); }
+        });
+    }
+
     private JButton botonClaro(String texto) {
         JButton btn = new JButton(texto);
         btn.setFocusPainted(false);
         btn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        btn.setBackground(new Color(90, 90, 100));
+        Color bg = new Color(90, 90, 100);
+        btn.setBackground(bg);
         btn.setForeground(Color.WHITE);
         btn.setBorder(new EmptyBorder(8, 12, 8, 12));
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent e) { btn.setBackground(new Color(110, 110, 120)); }
-            public void mouseExited(java.awt.event.MouseEvent e)  { btn.setBackground(new Color(90, 90, 100)); }
-        });
-
+        
+        agregarEfectoHover(btn, bg, new Color(110, 110, 120)); // Reutilizado
         return btn;
     }
 
@@ -162,12 +164,8 @@ public class FrmProducto extends JInternalFrame {
         btn.setBackground(c);
         btn.setForeground(Color.WHITE);
         btn.setBorder(new EmptyBorder(8, 20, 8, 20));
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent e) { btn.setBackground(c.darker()); }
-            public void mouseExited(java.awt.event.MouseEvent e)  { btn.setBackground(c); }
-        });
-
+        
+        agregarEfectoHover(btn, c, c.darker()); // Reutilizado
         return btn;
     }
 
@@ -192,10 +190,8 @@ public class FrmProducto extends JInternalFrame {
 
     private void actualizarTabla() {
         tableModel.setRowCount(0);
-
         try {
             List<ModeloProductoInventario> productos = controlador.obtenerProductos();
-
             for (ModeloProductoInventario producto : productos) {
                 tableModel.addRow(new Object[]{
                     producto.getIdProducto(),
@@ -205,7 +201,7 @@ public class FrmProducto extends JInternalFrame {
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar los productos: " + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
+            manejarErrorBD(e);
         }
     }
 
@@ -226,70 +222,10 @@ public class FrmProducto extends JInternalFrame {
         txtStockProducto.setText("");
     }
 
-    /**
-     * Valida que los campos del formulario no estén vacíos.
-     * @return true si todos los campos tienen valor, false en caso contrario
-     */
-    private boolean validarCamposNoVacios() {
-        String nombre = txtNombreProducto.getText().trim();
-        String precioStr = txtPrecioProducto.getText().trim();
-        String stockStr = txtStockProducto.getText().trim();
-
-        if (nombre.isEmpty() || precioStr.isEmpty() || stockStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_CAMPOS_OBLIGATORIOS,
-                "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
+    private void manejarErrorBD(SQLException e) {
+        JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
     }
 
-    /**
-     * Valida que el precio sea un número positivo.
-     * @param precio El precio a validar
-     * @return true si el precio es válido, false en caso contrario
-     */
-    private boolean validarPrecio(double precio) {
-        if (precio <= 0) {
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_PRECIO_POSITIVO,
-                "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            txtPrecioProducto.requestFocus();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Valida que el stock no sea negativo.
-     * @param stock El stock a validar
-     * @return true si el stock es válido, false en caso contrario
-     */
-    private boolean validarStock(int stock) {
-        if (stock < 0) {
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_STOCK_NO_NEGATIVO,
-                "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            txtStockProducto.requestFocus();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Valida que se haya seleccionado un producto de la tabla.
-     * @return true si hay un producto seleccionado, false en caso contrario
-     */
-    private boolean validarProductoSeleccionado() {
-        if (txtIdProducto.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_REGISTRO,
-                "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Obtiene los datos del producto del formulario.
-     * @return Array con [nombre, precio, stock] o null si hay error de formato
-     */
     private Object[] obtenerDatosProducto() {
         try {
             String nombre = txtNombreProducto.getText().trim();
@@ -297,70 +233,67 @@ public class FrmProducto extends JInternalFrame {
             int stock = Integer.parseInt(txtStockProducto.getText().trim());
             return new Object[]{nombre, precio, stock};
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                "El precio y el stock deben ser números válidos.",
-                Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El precio y el stock deben ser números válidos.", Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
 
-    private void btnGuardarAction() {
-        if (!validarCamposNoVacios()) return;
+    private ModeloProductoInventario obtenerProductoValidado() {
+        if (!validarCamposNoVacios()) return null;
 
         Object[] datos = obtenerDatosProducto();
-        if (datos == null) return;
+        if (datos == null) return null;
 
         String nombre = (String) datos[0];
         double precio = (double) datos[1];
         int stock = (int) datos[2];
 
-        if (!validarPrecio(precio)) return;
-        if (!validarStock(stock)) return;
+        if (!validarPrecio(precio)) return null;
+        if (!validarStock(stock)) return null;
+
+        ModeloProductoInventario p = new ModeloProductoInventario();
+        p.setNombreProducto(nombre);
+        p.setPrecioProducto(precio);
+        p.setStockProducto(stock);
+        return p;
+    }
+
+    private void btnGuardarAction() {
+        ModeloProductoInventario p = obtenerProductoValidado();
+        if (p == null) return;
 
         try {
-            controlador.agregarProducto(nombre, precio, stock);
+            controlador.agregarProducto(p.getNombreProducto(), p.getPrecioProducto(), p.getStockProducto());
             actualizarTabla();
             limpiarCampos();
             JOptionPane.showMessageDialog(this, Mensajes.MSG_GUARDADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
+            manejarErrorBD(e);
         }
     }
 
     private void btnModificarAction() {
         if (!validarProductoSeleccionado()) return;
-        if (!validarCamposNoVacios()) return;
-
-        Object[] datos = obtenerDatosProducto();
-        if (datos == null) return;
-
-        String nombre = (String) datos[0];
-        double precio = (double) datos[1];
-        int stock = (int) datos[2];
-
-        if (!validarPrecio(precio)) return;
-        if (!validarStock(stock)) return;
+        
+        ModeloProductoInventario p = obtenerProductoValidado();
+        if (p == null) return;
 
         try {
             int id = Integer.parseInt(txtIdProducto.getText());
-            controlador.modificarProducto(id, nombre, precio, stock);
+            controlador.modificarProducto(id, p.getNombreProducto(), p.getPrecioProducto(), p.getStockProducto());
             actualizarTabla();
             limpiarCampos();
             JOptionPane.showMessageDialog(this, Mensajes.MSG_MODIFICADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
+            manejarErrorBD(e);
         }
     }
 
     private void btnEliminarAction() {
         if (!validarProductoSeleccionado()) return;
 
-        if (JOptionPane.showConfirmDialog(this,
-                Mensajes.MSG_CONFIRMAR_ELIMINACION,
-                Mensajes.TITULO_CONFIRMAR,
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION)
-            return;
+        int confirm = JOptionPane.showConfirmDialog(this, Mensajes.MSG_CONFIRMAR_ELIMINACION, Mensajes.TITULO_CONFIRMAR, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (confirm != JOptionPane.YES_OPTION) return;
 
         try {
             int id = Integer.parseInt(txtIdProducto.getText());
@@ -369,7 +302,43 @@ public class FrmProducto extends JInternalFrame {
             limpiarCampos();
             JOptionPane.showMessageDialog(this, Mensajes.MSG_ELIMINADO_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_ERROR_BD + e.getMessage(), Mensajes.TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
+            manejarErrorBD(e);
         }
+    }
+
+    private boolean validarCamposNoVacios() {
+        if (txtNombreProducto.getText().trim().isEmpty() || 
+            txtPrecioProducto.getText().trim().isEmpty() || 
+            txtStockProducto.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_CAMPOS_OBLIGATORIOS, "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarPrecio(double precio) {
+        if (precio <= 0) {
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_PRECIO_POSITIVO, "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            txtPrecioProducto.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarStock(int stock) {
+        if (stock < 0) {
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_STOCK_NO_NEGATIVO, "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            txtStockProducto.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarProductoSeleccionado() {
+        if (txtIdProducto.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_SELECCIONE_REGISTRO, "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }

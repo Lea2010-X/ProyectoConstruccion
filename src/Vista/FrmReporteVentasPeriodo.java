@@ -214,7 +214,6 @@ public class FrmReporteVentasPeriodo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {
-        // Validación previa
         if (reporteActual == null) {
             JOptionPane.showMessageDialog(this,
                     Mensajes.MSG_REPORTE_REQUERIDO_PDF,

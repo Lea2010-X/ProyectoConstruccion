@@ -4,7 +4,6 @@ import Controlador.ControladorVenta;
 import Modelo.ModeloCliente;
 import Modelo.ModeloItemCarrito;
 import Modelo.ModeloProductoInventario;
-import Util.Constantes;
 import Util.Mensajes;
 import Util.TemaModerno;
 import java.sql.SQLException;
@@ -105,16 +104,33 @@ public class FrmVentas extends javax.swing.JInternalFrame {
         lblIVA.setText("----");
         lblMostrarTotal.setText("----");
     }
+    /**
+     * Convierte los datos de la tabla visual a una lista de objetos lógica.
+     * @return Lista de items del carrito.
+     */
+    private List<ModeloItemCarrito> obtenerItemsDeTabla() {
+        List<ModeloItemCarrito> items = new ArrayList<>();
 
-    private void calcularTotalPagar() {
-        double totalSubtotal = 0;
         for (int i = 0; i < modeloResumenVenta.getRowCount(); i++) {
-            totalSubtotal += (double) modeloResumenVenta.getValueAt(i, 4);
+
+            int id = (int) modeloResumenVenta.getValueAt(i, 0);
+            String nombre = (String) modeloResumenVenta.getValueAt(i, 1);
+            double precio = (double) modeloResumenVenta.getValueAt(i, 2);
+            int cantidad = (int) modeloResumenVenta.getValueAt(i, 3);
+            double subtotal = (double) modeloResumenVenta.getValueAt(i, 4);
+
+            items.add(new ModeloItemCarrito(id, nombre, precio, cantidad));
         }
-        double totalIva = (totalSubtotal * Constantes.TASA_IVA) ;
-        System.out.println(totalIva);
-        lblMostrarTotal.setText(String.valueOf(totalSubtotal + totalIva));
-        lblIVA.setText(String.format("%.2f", totalIva));
+
+        return items;
+    }
+    private void calcularTotalPagar() {
+        List<ModeloItemCarrito> listaItems = obtenerItemsDeTabla();
+        double total = controlador.calcularTotalVenta(listaItems);
+        double iva = controlador.calcularIVAVenta(listaItems);
+
+        lblMostrarTotal.setText(String.format("%.2f", total));
+        lblIVA.setText(String.format("%.2f", iva));
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -739,20 +755,20 @@ public class FrmVentas extends javax.swing.JInternalFrame {
 
         String idProductoStr = txtSIDProducto.getText();
         if (idProductoStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un producto de la lista.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un producto de la lista.", Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String cantidadStr = txtCantidadVenta.getText().trim();
+        String cantidadStr = txtCantidadVenta.getText().trim(); 
         if (cantidadStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar una cantidad.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe ingresar una cantidad.", Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
             txtCantidadVenta.requestFocus();
             return;
         }
 
         String precioVentaStr = txtSPrecioVenta.getText().trim();
         if (precioVentaStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El precio de venta no puede estar vacío.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El precio de venta no puede estar vacío.", Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -764,13 +780,13 @@ public class FrmVentas extends javax.swing.JInternalFrame {
             String nombreProducto = txtSNombreProducto.getText();
 
             if (cantidad <= 0) {
-                JOptionPane.showMessageDialog(this, Mensajes.MSG_CANTIDAD_MAYOR_CERO, "Error de Lógica", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, Mensajes.MSG_CANTIDAD_MAYOR_CERO, Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
                 txtCantidadVenta.requestFocus();
                 return;
             }
 
             if (precioVenta <= 0) {
-                JOptionPane.showMessageDialog(this, "El precio de venta debe ser mayor a cero.", "Error de Lógica", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "El precio de venta debe ser mayor a cero.", Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -787,19 +803,19 @@ public class FrmVentas extends javax.swing.JInternalFrame {
                 }
             }
 
-            double subtotal = precioVenta * cantidad;
+            ModeloItemCarrito nuevoItem = new ModeloItemCarrito(idProducto, nombreProducto, precioVenta, cantidad);
             modeloResumenVenta.addRow(new Object[]{
                     idProducto,
                     nombreProducto,
                     precioVenta,
                     cantidad,
-                    subtotal
+                    nuevoItem.getSubtotal()
             });
 
             calcularTotalPagar();
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La cantidad y el precio deben ser números válidos.", Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_NUMERO_INVALIDO, Mensajes.MSG_ERROR_FORMATO, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
@@ -836,12 +852,12 @@ public class FrmVentas extends javax.swing.JInternalFrame {
                 int cantidad = (int) modeloResumenVenta.getValueAt(i, 3);
                 double subtotal = (double) modeloResumenVenta.getValueAt(i, 4);
 
-                itemsVenta.add(new ModeloItemCarrito(idProducto, nombre, precio, cantidad, subtotal));
+                itemsVenta.add(new ModeloItemCarrito(idProducto, nombre, precio, cantidad));
             }
 
             controlador.procesarVenta(idCliente, itemsVenta);
 
-            JOptionPane.showMessageDialog(this, Mensajes.MSG_VENTA_EXITO, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, Mensajes.MSG_VENTA_EXITO, Mensajes.TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
             limpiarCamposLuegoVenta();
             actualizarUltimaFactura();
 

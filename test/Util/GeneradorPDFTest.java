@@ -171,7 +171,7 @@ class GeneradorPDFTest {
         reporte.setItems(items);
 
         reporte.setIva(18.00);
-        reporte.setTotal(118.00);
+        reporte.setSubtotal(118.00);
 
         return reporte;
     }

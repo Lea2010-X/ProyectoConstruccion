@@ -58,7 +58,7 @@ public class ReportesDAOTest extends BaseDAOTest {
         assertEquals(5, item.getCantidad());
         assertEquals(12.0, item.getPrecioVenta());
         assertEquals(60.0, item.getSubtotal()); 
-        assertEquals(60.0, comprobante.getTotal());
+        assertEquals(60.0, comprobante.getSubtotal());
         
     }
 

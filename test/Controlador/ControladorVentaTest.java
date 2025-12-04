@@ -41,8 +41,8 @@ public class ControladorVentaTest {
         int idCliente = 1;
         int idFacturaNueva = 99; 
         List<ModeloItemCarrito> carrito = new ArrayList<>();
-        carrito.add(new ModeloItemCarrito(10, "Lápiz", 15.0, 2, 30.0));
-        carrito.add(new ModeloItemCarrito(20, "Goma", 5.0, 3, 15.0));
+        carrito.add(new ModeloItemCarrito(10, "Lápiz", 15.0, 2));
+        carrito.add(new ModeloItemCarrito(20, "Goma", 5.0, 3));
         when(facturaDAO.crearFactura(1)).thenReturn(idFacturaNueva); 
         controlador.procesarVenta(idCliente, carrito);
         verify(facturaDAO, times(1)).crearFactura(1); 

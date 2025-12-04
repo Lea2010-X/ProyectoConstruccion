@@ -93,12 +93,7 @@ public final class ControladorVenta extends ControladorBase {
      * @throws SQLException si algo falla durante la transacción.
      */
     public void procesarVenta(int idCliente, List<ModeloItemCarrito> itemsVenta) throws SQLException {
-        
-        // Lógica de negocio:
-        // 1. Crear la Factura
         int idFacturaCreada = facturaDAO.crearFactura(idCliente);
-        
-        // 2. Guardar cada detalle y actualizar stock
         for (ModeloItemCarrito item : itemsVenta) {
             detalleDAO.agregarDetalle(
                     idFacturaCreada,
@@ -111,5 +106,21 @@ public final class ControladorVenta extends ControladorBase {
                     item.getCantidad()
             );
         }
+    }
+
+    public double calcularTotalVenta(List<ModeloItemCarrito> items) {
+        double sumaSubtotales = 0;
+        for (ModeloItemCarrito item : items) {
+            sumaSubtotales += item.getSubtotal();
+        }
+        return sumaSubtotales + (sumaSubtotales * Util.Constantes.TASA_IVA);
+    }
+
+    public double calcularIVAVenta(List<ModeloItemCarrito> items) {
+        double sumaSubtotales = 0;
+        for (ModeloItemCarrito item : items) {
+            sumaSubtotales += item.getSubtotal();
+        }
+        return sumaSubtotales * Util.Constantes.TASA_IVA;
     }
 }

@@ -227,7 +227,7 @@ public class FrmClientes extends JInternalFrame {
     }
 
     /**
-     * Valida que todos los campos del cliente estén completos.
+     * Válida que todos los campos del cliente estén completos.
      * @param validarApellidos true para validar apellidos también (para guardar), 
      *                         false para validación parcial (para modificar)
      * @return true si la validación pasa, false en caso contrario
@@ -239,7 +239,7 @@ public class FrmClientes extends JInternalFrame {
         
         if (nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this, Mensajes.MSG_NOMBRE_REQUERIDO,
-                "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
             txtNombres.requestFocus();
             return false;
         }
@@ -247,13 +247,13 @@ public class FrmClientes extends JInternalFrame {
         if (validarApellidos) {
             if (apPaterno.isEmpty()) {
                 JOptionPane.showMessageDialog(this, Mensajes.MSG_APPATERNO_REQUERIDO,
-                    "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                        Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
                 txtApellidoPaterno.requestFocus();
                 return false;
             }
             if (apMaterno.isEmpty()) {
                 JOptionPane.showMessageDialog(this, Mensajes.MSG_APMATERNO_REQUERIDO,
-                    "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                        Mensajes.TITULO_ERROR, JOptionPane.WARNING_MESSAGE);
                 txtApellidoMaterno.requestFocus();
                 return false;
             }
@@ -263,7 +263,7 @@ public class FrmClientes extends JInternalFrame {
     }
     
     /**
-     * Valida que se haya seleccionado un cliente de la tabla.
+     * Válida que se haya seleccionado un cliente de la tabla.
      * @return true si hay un cliente seleccionado, false en caso contrario
      */
     private boolean validarClienteSeleccionado() {

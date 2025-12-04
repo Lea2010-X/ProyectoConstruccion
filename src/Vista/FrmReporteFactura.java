@@ -53,7 +53,6 @@ public class FrmReporteFactura extends JInternalFrame {
         JPanel panelPrincipal = new JPanel(new BorderLayout(0, 10));
         panelPrincipal.setBorder(new EmptyBorder(15, 15, 15, 15));
 
-        // --- PANEL SUPERIOR (Búsqueda + Info) ---
         JPanel panelSuperior = new JPanel(new BorderLayout(0, 10));
         
         JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
@@ -72,7 +71,6 @@ public class FrmReporteFactura extends JInternalFrame {
         panelSuperior.add(panelBusqueda, BorderLayout.NORTH);
         panelSuperior.add(panelInfoFactura, BorderLayout.CENTER);
 
-        // --- PANEL CENTRAL (Tabla) ---
         JPanel panelTabla = new JPanel(new BorderLayout());
         JLabel lbProductos = new JLabel("Productos");
         lbProductos.setFont(TemaModerno.FUENTE_SUBTITULO);
@@ -88,7 +86,6 @@ public class FrmReporteFactura extends JInternalFrame {
         panelTabla.add(lbProductos, BorderLayout.NORTH);
         panelTabla.add(new JScrollPane(tbProductos), BorderLayout.CENTER);
 
-        // --- PANEL INFERIOR (Totales + Botón PDF) ---
         JPanel panelInferior = crearPanelInferior();
 
         panelPrincipal.add(panelSuperior, BorderLayout.NORTH);
@@ -98,17 +95,14 @@ public class FrmReporteFactura extends JInternalFrame {
         add(panelPrincipal, BorderLayout.CENTER);
     }
 
-    // Método auxiliar para limpiar initUI (creación de paneles complejos)
     private JPanel crearPanelInfoFactura() {
         JPanel panelInfo = new JPanel(new BorderLayout(0, 5));
 
-        // Panel Fecha/ID
         JPanel panelFacturaFecha = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
         lbMostrarFactura = crearLabelDato("Factura N°:", panelFacturaFecha);
         panelFacturaFecha.add(Box.createHorizontalStrut(50));
         lbMostrarFechaDeVenta = crearLabelDato("Fecha de Venta:", panelFacturaFecha);
 
-        // Panel Cliente (GridBag)
         JPanel panelDatosCliente = new JPanel(new GridBagLayout());
         panelDatosCliente.setBorder(BorderFactory.createTitledBorder("Datos del Cliente"));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -143,8 +137,6 @@ public class FrmReporteFactura extends JInternalFrame {
         return panelInf;
     }
 
-    // --- MÉTODOS UI HELPERS (Similares a FrmProducto) ---
-
     private JTextField campoTexto() {
         JTextField t = new JTextField();
         t.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -173,7 +165,6 @@ public class FrmReporteFactura extends JInternalFrame {
         return btn;
     }
     
-    // Helpers para crear labels rápidamente y limpiar initUI
     private JLabel crearLabelDato(String titulo, JPanel padre) {
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(TemaModerno.FUENTE_SUBTITULO);
@@ -198,8 +189,6 @@ public class FrmReporteFactura extends JInternalFrame {
         return lblValor;
     }
 
-    // --- LÓGICA DEL NEGOCIO ---
-
     private void limpiarCampos() {
         lbMostrarFactura.setText("...");
         lbMostrarFechaDeVenta.setText("...");
@@ -213,7 +202,6 @@ public class FrmReporteFactura extends JInternalFrame {
         btnGenerarPDF.setEnabled(false);
     }
 
-    // Método extraído para limpiar la lógica del botón Buscar
     private void mostrarDetallesFactura(ModeloReporteFactura c) {
         lbMostrarFactura.setText(String.valueOf(c.getIdFactura()));
         lbMostrarFechaDeVenta.setText(c.getFechaFactura().toString());
@@ -254,7 +242,7 @@ public class FrmReporteFactura extends JInternalFrame {
 
             if (comprobante != null) {
                 reporteActual = comprobante;
-                mostrarDetallesFactura(comprobante); // Lógica de UI separada
+                mostrarDetallesFactura(comprobante); 
                 btnGenerarPDF.setEnabled(true);
             } else {
                 JOptionPane.showMessageDialog(this, Mensajes.MSG_FACTURA_NO_ENCONTRADA + numFactura, Mensajes.TITULO_ADVERTENCIA, JOptionPane.INFORMATION_MESSAGE);
